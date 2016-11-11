@@ -124,7 +124,7 @@ public class AuthenticatorClass implements Authenticator {
         PreparedStatement slc = c.prepareStatement(SELECTLOCKEDSQL);
         slc.setString(1, name);
         rs = slc.executeQuery();
-        if (rs.next()) {
+        if (!rs.next()) {
             closeDatabaseConnection();
             throw new LockedAccountException();
         }
