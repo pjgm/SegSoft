@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import app.*;
+import exceptions.EmptyFieldException;
+import exceptions.PasswordMismatchException;
 
 @WebServlet("/ChangePassword")
 public class ChangePassword extends AbstractServlet {
@@ -27,6 +28,7 @@ public class ChangePassword extends AbstractServlet {
 		request.getRequestDispatcher("/WEB-INF/changepassword.jsp").forward(request, response);
 	}
 
+	//TODO: User gets logged out after password change, fix?
 	@Override
 	protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -37,14 +39,16 @@ public class ChangePassword extends AbstractServlet {
 		Pattern p1 = Pattern.compile(USERNAMEPATTERN);
 		Matcher m1 = p1.matcher(username);
 		if (!m1.matches()) {
-			request.getSession().setAttribute("errorMessage", "Username has invalid format");
+			request.setAttribute("errorMessage", "Username has invalid format");
+			request.getRequestDispatcher("/WEB-INF/changepassword.jsp").forward(request, response);
 			return;
 		}
 
 		Pattern p2 = Pattern.compile(PASSWORDPATTERN);
 		Matcher m2 = p2.matcher(password);
 		if (!m2.matches()) {
-			request.getSession().setAttribute("errorMessage", "Password has invalid format");
+			request.setAttribute("errorMessage", "Password has invalid format");
+			request.getRequestDispatcher("/WEB-INF/changepassword.jsp").forward(request, response);
 			return;
 		}
 
@@ -53,15 +57,11 @@ public class ChangePassword extends AbstractServlet {
 			LOGGER.log(Level.FINE, "PASSWORD CHANGE FOR USER " + username);
 			HttpSession session = request.getSession();
 			session.invalidate();
-			request.getSession().setAttribute("errorMessage", "Password changed sucessfully");
-		} catch (SQLException e) {
-			request.getSession().setAttribute("errorMessage", "Error in SQL query");
-		} catch (PasswordMismatchException e) {
-			request.getSession().setAttribute("errorMessage", "Passwords do not match");
-		} catch (EmptyFieldException e) {
-			request.getSession().setAttribute("errorMessage", "A required field is empty");
+			request.setAttribute("errorMessage", "Password changed sucessfully");
+		} catch (SQLException | PasswordMismatchException | EmptyFieldException e) {
+			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
-			response.sendRedirect(request.getHeader("Referer"));
+			request.getRequestDispatcher("/WEB-INF/changepassword.jsp").forward(request, response);
 			auth.closeDatabaseConnection();
 		}
 	}

@@ -1,5 +1,7 @@
 package app;
 
+import exceptions.*;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

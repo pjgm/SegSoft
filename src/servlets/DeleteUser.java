@@ -11,7 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import app.*;
+import exceptions.AccountConnectionException;
+import exceptions.LockedAccountException;
+import exceptions.UndefinedAccountException;
 
 @WebServlet("/DeleteUser")
 public class DeleteUser extends AbstractServlet {
@@ -43,24 +45,19 @@ public class DeleteUser extends AbstractServlet {
 		Pattern p1 = Pattern.compile(USERNAMEPATTERN);
 		Matcher m1 = p1.matcher(username);
 		if (!m1.matches()) {
-			response.getOutputStream().print("Username has invalid format");
+			request.setAttribute("errorMessage", "Username has invalid format");
+			request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
 			return;
 		}
 
 		try {
 			auth.delete_account(username);
 			LOGGER.log(Level.FINE, "DELETED ACCOUNT " + username);
-			response.getOutputStream().print("User deleted successfully");
-		} catch (SQLException e) {
-			response.getOutputStream().print("Error in SQL query");
-		} catch (UndefinedAccountException e) {
-			response.getOutputStream().print("User does not exist");
-		} catch (LockedAccountException e) {
-			response.getOutputStream().print("User has to be locked");
-		} catch (AccountConnectionException e) {
-			response.getOutputStream().print("User has to be logged out");
-		}
-		finally {
+			request.setAttribute("errorMessage", "User deleted successfully");
+		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException e) {
+			request.setAttribute("errorMessage", e.getMessage());
+		} finally {
+			request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
             auth.closeDatabaseConnection();
         }
     }

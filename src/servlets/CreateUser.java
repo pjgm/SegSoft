@@ -11,7 +11,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import app.*;
+import exceptions.EmptyFieldException;
+import exceptions.ExistingAccountException;
+import exceptions.PasswordMismatchException;
 
 @WebServlet("/CreateUser")
 public class CreateUser extends AbstractServlet {
@@ -46,31 +48,28 @@ public class CreateUser extends AbstractServlet {
 		Pattern p1 = Pattern.compile(USERNAMEPATTERN);
 		Matcher m1 = p1.matcher(username);
 		if (!m1.matches()) {
-			response.getOutputStream().print("Username has invalid format");
+			request.setAttribute("errorMessage", "Username has invalid format");
+			request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
 			return;
 		}
 
 		Pattern p2 = Pattern.compile(PASSWORDPATTERN);
 		Matcher m2 = p2.matcher(password);
 		if (!m2.matches()) {
-			response.getOutputStream().print("Password has invalid format");
+			request.setAttribute("errorMessage", "Password has invalid format");
+			request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
 			return;
 		}
 
 		try {
 			LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
 			auth.create_account(username, password, password2);
-			response.getOutputStream().print("User created successfully");
-		} catch (SQLException e) {
-			response.getOutputStream().print("Error in SQL query");
-		} catch (PasswordMismatchException e) {
-			response.getOutputStream().print("Passwords do not match");
-		} catch (ExistingAccountException e) {
-			response.getOutputStream().print("User already exists");
-		} catch (EmptyFieldException e) {
-			response.getOutputStream().print("A required field is empty");
+			request.setAttribute("errorMessage", "User created successfully");
+		} catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
+			request.setAttribute("errorMessage", e.getMessage());
 		}
 		finally {
+			request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
 			auth.closeDatabaseConnection();
 		}
 	}

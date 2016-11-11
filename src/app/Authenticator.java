@@ -1,5 +1,7 @@
 package app;
 
+import exceptions.*;
+
 import java.sql.SQLException;
 
 import javax.servlet.http.HttpServletRequest;

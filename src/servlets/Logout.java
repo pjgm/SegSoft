@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import app.*;
+import exceptions.UndefinedAccountException;
 
 @WebServlet("/Logout")
 public class Logout extends AbstractServlet {
@@ -33,13 +34,11 @@ public class Logout extends AbstractServlet {
 			auth.logout(a);
 			session.invalidate();
 			LOGGER.log(Level.FINE, "LOGOUT " + username);
-			response.getOutputStream().print("Logout successful");
-		} catch (SQLException e) {
-			System.out.println("Error in SQL Query");
-		} catch (UndefinedAccountException e) {
-			System.out.println("Account doesn't exist, cannot logout");
-		}
-		finally {
+			request.setAttribute("errorMessage", "Logout successful");
+		} catch (SQLException | UndefinedAccountException e) {
+			request.setAttribute("errorMessage", e.getMessage());
+		} finally {
+			request.getRequestDispatcher("/WEB-INF/logout.jsp").forward(request, response);
 			auth.closeDatabaseConnection();
 		}
 	}
