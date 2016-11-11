@@ -65,12 +65,11 @@ public class CreateUser extends AbstractServlet {
 			LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
 			auth.create_account(username, password, password2);
 			request.setAttribute("errorMessage", "User created successfully");
-		} catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
+		} catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException | ClassNotFoundException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		}
 		finally {
 			request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
-			auth.closeDatabaseConnection();
 		}
 	}
 }

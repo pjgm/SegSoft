@@ -54,11 +54,10 @@ public class DeleteUser extends AbstractServlet {
 			auth.delete_account(username);
 			LOGGER.log(Level.FINE, "DELETED ACCOUNT " + username);
 			request.setAttribute("errorMessage", "User deleted successfully");
-		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException e) {
+		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException | ClassNotFoundException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
 			request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
-            auth.closeDatabaseConnection();
         }
     }
 }

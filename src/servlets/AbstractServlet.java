@@ -27,31 +27,23 @@ public abstract class AbstractServlet extends HttpServlet {
 
     private static final String PASSWORDPATTERN = "((?=.*[a-z]).{8,64})";
 
-    private boolean isSetupDone() {
-        try {
-            return auth.isSetupDone();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-        return true;
+    private boolean isSetupDone() throws SQLException, ClassNotFoundException {
+        return auth.isSetupDone();
     }
 
     private Account sessionLogin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("USER") == null) {
+        if (session == null || session.getAttribute("USER") == null)
             return null;
-        }
 
         try {
             Account user = auth.login(request, response);
             LOGGER.log(Level.FINE, "LOGIN " + user.get_account_name());
             return user;
-        } catch (AuthenticationErrorException | SQLException | UndefinedAccountException | LockedAccountException e) {
+        } catch (AuthenticationErrorException | SQLException | UndefinedAccountException | LockedAccountException | ClassNotFoundException e) {
             request.setAttribute("errorMessage", e.getMessage());
-        } finally {
-            auth.closeDatabaseConnection();
         }
 
         return null;
@@ -64,11 +56,16 @@ public abstract class AbstractServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (!isSetupDone()) {
-            request.getRequestDispatcher("/WEB-INF/setup.jsp").forward(request, response);
+        try {
+            if (!isSetupDone()) {
+                request.getRequestDispatcher("/WEB-INF/setup.jsp").forward(request, response);
+                return;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            request.setAttribute("errorMessage", e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }
-
         Account a = sessionLogin(request, response);
         if (a == null) {
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
@@ -81,7 +78,16 @@ public abstract class AbstractServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (!isSetupDone()) {
+        boolean isSetupDone = false;
+        try {
+            isSetupDone = isSetupDone();
+        } catch (SQLException | ClassNotFoundException e) {
+            request.setAttribute("errorMessage" , e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/setup.jsp").forward(request, response);
+            return;
+        }
+
+        if (!isSetupDone) {
             String password = request.getParameter("password");
             Pattern p2 = Pattern.compile(PASSWORDPATTERN);
             Matcher m2 = p2.matcher(password);
@@ -95,11 +101,10 @@ public abstract class AbstractServlet extends HttpServlet {
                 auth.create_account("root", password, password);
                 LOGGER.log(Level.FINE, "ROOT SETUP SUCCESSFUL");
                 request.setAttribute("errorMessage", "Admin created successfully");
-            } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
+            } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException | ClassNotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
             } finally {
                 request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-                auth.closeDatabaseConnection();
             }
 
             return;
@@ -119,11 +124,9 @@ public abstract class AbstractServlet extends HttpServlet {
                 session.setMaxInactiveInterval(SESSIONTIMEOUT);
                 request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
             } catch (SQLException | UndefinedAccountException | LockedAccountException | EmptyFieldException |
-                    AuthenticationErrorException e) {
+                    AuthenticationErrorException | ClassNotFoundException e) {
                 request.setAttribute("errorMessage", e.getMessage());
                 request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-            } finally {
-                auth.closeDatabaseConnection();
             }
             return;
         }

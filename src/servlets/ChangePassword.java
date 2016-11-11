@@ -58,11 +58,10 @@ public class ChangePassword extends AbstractServlet {
 			HttpSession session = request.getSession();
 			session.invalidate();
 			request.setAttribute("errorMessage", "Password changed sucessfully");
-		} catch (SQLException | PasswordMismatchException | EmptyFieldException e) {
+		} catch (SQLException | PasswordMismatchException | EmptyFieldException | ClassNotFoundException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
 			request.getRequestDispatcher("/WEB-INF/changepassword.jsp").forward(request, response);
-			auth.closeDatabaseConnection();
 		}
 	}
 }

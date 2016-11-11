@@ -35,11 +35,10 @@ public class Logout extends AbstractServlet {
 			session.invalidate();
 			LOGGER.log(Level.FINE, "LOGOUT " + username);
 			request.setAttribute("errorMessage", "Logout successful");
-		} catch (SQLException | UndefinedAccountException e) {
+		} catch (SQLException | UndefinedAccountException | ClassNotFoundException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
 			request.getRequestDispatcher("/WEB-INF/logout.jsp").forward(request, response);
-			auth.closeDatabaseConnection();
 		}
 	}
 }
