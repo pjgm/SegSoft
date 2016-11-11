@@ -56,6 +56,7 @@ public class ChangePassword extends AbstractServlet {
 			auth.change_pwd(username, password, password2);
 			LOGGER.log(Level.FINE, "PASSWORD CHANGE FOR USER " + username);
 			HttpSession session = request.getSession();
+			//// TODO: The session is only invalidated if the user is changing its own password. 
 			session.invalidate();
 			request.setAttribute("errorMessage", "Password changed sucessfully");
 		} catch (SQLException | PasswordMismatchException | EmptyFieldException | ClassNotFoundException e) {

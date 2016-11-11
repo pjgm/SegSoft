@@ -92,8 +92,10 @@ public class AuthenticatorClass implements Authenticator {
             iu.setInt(4, 0);
             iu.setString(5, salt);
             iu.executeUpdate();
-        } else
+        } else {
+            closeDatabaseConnection();
             throw new ExistingAccountException();
+        }
 
         closeDatabaseConnection();
     }
@@ -106,20 +108,26 @@ public class AuthenticatorClass implements Authenticator {
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
         ResultSet rs = sbn.executeQuery();
-        if (!rs.next())
+        if (!rs.next()) {
+            closeDatabaseConnection();
             throw new UndefinedAccountException();
+        }
 
         PreparedStatement slg = c.prepareStatement(SELECTLOGGEDSQL);
         slg.setString(1, name);
         rs = slg.executeQuery();
-        if (rs.next())
+        if (rs.next()) {
+            closeDatabaseConnection();
             throw new AccountConnectionException();
+        }
 
         PreparedStatement slc = c.prepareStatement(SELECTLOCKEDSQL);
         slc.setString(1, name);
         rs = slc.executeQuery();
-        if (rs.next())
+        if (rs.next()) {
+            closeDatabaseConnection();
             throw new LockedAccountException();
+        }
 
         PreparedStatement dbn = c.prepareStatement(DELETEBYNAMESQL);
         dbn.setString(1, name);
@@ -148,8 +156,10 @@ public class AuthenticatorClass implements Authenticator {
                 a.log_in();
             if (lock == 1)
                 a.lock();
-        } else
+        } else {
+            closeDatabaseConnection();
             throw new UndefinedAccountException();
+        }
 
         closeDatabaseConnection();
 
@@ -202,8 +212,10 @@ public class AuthenticatorClass implements Authenticator {
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
         ResultSet rs = sbn.executeQuery();
-        if (!rs.next())
+        if (!rs.next()) {
+            closeDatabaseConnection();
             throw new UndefinedAccountException();
+        }
 
         PasswordHashGenerator phg = new PasswordHashGenerator(pwd);
         String salt = rs.getString("salt");
@@ -212,14 +224,18 @@ public class AuthenticatorClass implements Authenticator {
         PreparedStatement slc = c.prepareStatement(SELECTLOCKEDSQL);
         slc.setString(1, name);
         rs = slc.executeQuery();
-        if (rs.next())
+        if (rs.next()) {
+            closeDatabaseConnection();
             throw new LockedAccountException();
+        }
 
         PreparedStatement sbp = c.prepareStatement(SELECTBYPWDSQL);
         sbp.setString(1, pwd);
         rs = sbp.executeQuery();
-        if (!rs.next())
+        if (!rs.next()) {
+            closeDatabaseConnection();
             throw new AuthenticationErrorException();
+        }
 
         rs = sbn.executeQuery();
         if (rs.next()) {
