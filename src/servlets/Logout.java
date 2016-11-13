@@ -38,7 +38,7 @@ public class Logout extends AbstractServlet {
 		} catch (SQLException | UndefinedAccountException | ClassNotFoundException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
-			request.getRequestDispatcher("/WEB-INF/logout.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
 		}
 	}
 }

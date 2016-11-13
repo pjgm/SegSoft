@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 public class AuthenticatorClass implements Authenticator {
 
     private Connection c;
+
     private static final String CREATETABLESQL = "create table if not exists account (name string, pwd string, logged integer, locked integer, salt string)";
     private static final String SELECTBYNAMESQL = "select * from account where name LIKE ?";
     private static final String INSERTUSERSQL = "insert into account (name, pwd, logged, locked, salt) values (?, ?, ?, ?, ?)";
@@ -27,7 +28,8 @@ public class AuthenticatorClass implements Authenticator {
     private static final String LOGINBYNAMESQL = "update account set logged = 1 where name LIKE ?";
     private static final String LOGOUTBYNAMESQL = "update account set logged = 0 where name LIKE ?";
 
-    public AuthenticatorClass() {
+    public AuthenticatorClass(Connection c) {
+        this.c = c;
         try {
             setupDatabase();
         } catch (ClassNotFoundException | SQLException e) {
@@ -35,21 +37,9 @@ public class AuthenticatorClass implements Authenticator {
         }
     }
 
-    public void connectToDatabase() throws SQLException, ClassNotFoundException {
-        Class.forName("org.sqlite.JDBC");
-        this.c = DriverManager.getConnection("jdbc:sqlite:Auth.db");
-    }
-
-    public void closeDatabaseConnection() throws SQLException {
-        if (c != null)
-            c.close();
-    }
-
     public void setupDatabase() throws ClassNotFoundException, SQLException {
-        connectToDatabase();
         PreparedStatement ct = c.prepareStatement(CREATETABLESQL);
         ct.executeUpdate();
-        closeDatabaseConnection();
     }
 
     public boolean isSetupDone() throws SQLException, ClassNotFoundException {
@@ -57,12 +47,10 @@ public class AuthenticatorClass implements Authenticator {
     }
 
     public boolean accountExists(String name) throws SQLException, ClassNotFoundException {
-        connectToDatabase();
         PreparedStatement sbn;
         sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
         boolean exists = sbn.executeQuery().next();
-        closeDatabaseConnection();
         return exists;
     }
 
@@ -79,7 +67,6 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        connectToDatabase();
 
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
@@ -93,23 +80,19 @@ public class AuthenticatorClass implements Authenticator {
             iu.setString(5, salt);
             iu.executeUpdate();
         } else {
-            closeDatabaseConnection();
             throw new ExistingAccountException();
         }
 
-        closeDatabaseConnection();
     }
 
     public void delete_account(String name)
             throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException {
 
-        connectToDatabase();
 
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
         ResultSet rs = sbn.executeQuery();
         if (!rs.next()) {
-            closeDatabaseConnection();
             throw new UndefinedAccountException();
         }
 
@@ -117,7 +100,6 @@ public class AuthenticatorClass implements Authenticator {
         slg.setString(1, name);
         rs = slg.executeQuery();
         if (rs.next()) {
-            closeDatabaseConnection();
             throw new AccountConnectionException();
         }
 
@@ -125,22 +107,18 @@ public class AuthenticatorClass implements Authenticator {
         slc.setString(1, name);
         rs = slc.executeQuery();
         if (!rs.next()) {
-            closeDatabaseConnection();
-            throw new LockedAccountException();
+            throw new LockedAccountException("The account is unlocked, can't delete");
         }
 
         PreparedStatement dbn = c.prepareStatement(DELETEBYNAMESQL);
         dbn.setString(1, name);
         dbn.executeUpdate();
 
-        closeDatabaseConnection();
     }
 
     public Account get_account(String name) throws SQLException, UndefinedAccountException, ClassNotFoundException {
 
         Account a;
-
-        connectToDatabase();
 
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
@@ -157,11 +135,9 @@ public class AuthenticatorClass implements Authenticator {
             if (lock == 1)
                 a.lock();
         } else {
-            closeDatabaseConnection();
             throw new UndefinedAccountException();
         }
 
-        closeDatabaseConnection();
 
         return a;
     }
@@ -179,7 +155,6 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        connectToDatabase();
 
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
@@ -195,25 +170,24 @@ public class AuthenticatorClass implements Authenticator {
             us.setString(2, name);
             us.executeUpdate();
         }
-
-        closeDatabaseConnection();
     }
 
     public Account login(String name, String pwd) throws SQLException, UndefinedAccountException,
             LockedAccountException, EmptyFieldException, AuthenticationErrorException, ClassNotFoundException {
+
+        if (name == null || pwd == null)
+            throw new AuthenticationErrorException();
 
         if (name.isEmpty() || pwd.isEmpty())
             throw new EmptyFieldException();
 
         Account a = null;
 
-        connectToDatabase();
 
         PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
         ResultSet rs = sbn.executeQuery();
         if (!rs.next()) {
-            closeDatabaseConnection();
             throw new UndefinedAccountException();
         }
 
@@ -225,15 +199,13 @@ public class AuthenticatorClass implements Authenticator {
         slc.setString(1, name);
         rs = slc.executeQuery();
         if (rs.next()) {
-            closeDatabaseConnection();
-            throw new LockedAccountException();
+            throw new LockedAccountException("The account is locked");
         }
 
         PreparedStatement sbp = c.prepareStatement(SELECTBYPWDSQL);
         sbp.setString(1, pwd);
         rs = sbp.executeQuery();
         if (!rs.next()) {
-            closeDatabaseConnection();
             throw new AuthenticationErrorException();
         }
 
@@ -250,16 +222,12 @@ public class AuthenticatorClass implements Authenticator {
             a.log_in();
         }
 
-        closeDatabaseConnection();
-
         return a;
     }
 
     public void logout(Account acc) throws SQLException, ClassNotFoundException {
 
         String name = acc.get_account_name();
-
-        connectToDatabase();
 
         PreparedStatement slg = c.prepareStatement(SELECTLOGGEDSQL);
         slg.setString(1, name);
@@ -269,8 +237,6 @@ public class AuthenticatorClass implements Authenticator {
             lbn.setString(1, name);
             lbn.executeUpdate();
         }
-
-        closeDatabaseConnection();
     }
 
     public Account login(HttpServletRequest req, HttpServletResponse resp)
@@ -289,7 +255,7 @@ public class AuthenticatorClass implements Authenticator {
             throw new AuthenticationErrorException();
 
         if (a.is_locked())
-            throw new LockedAccountException();
+            throw new LockedAccountException("The account is locked");
 
         return a;
     }

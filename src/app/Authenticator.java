@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public interface Authenticator {
-	public void closeDatabaseConnection() throws SQLException;
+
+	//void closeDatabaseConnection() throws SQLException;
 
 	boolean isSetupDone() throws SQLException, ClassNotFoundException;
 
@@ -28,6 +29,6 @@ public interface Authenticator {
 
 	void logout(Account acc) throws SQLException, ClassNotFoundException;
 
-	public Account login(HttpServletRequest req, HttpServletResponse resp)
+	Account login(HttpServletRequest req, HttpServletResponse resp)
 			throws SQLException, UndefinedAccountException, LockedAccountException, AuthenticationErrorException, ClassNotFoundException;
 }
