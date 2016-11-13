@@ -7,17 +7,16 @@ import java.sql.SQLException;
 
 public class DBUtil {
 
-    protected Connection connection;
-
-    private final String driver = "org.sqlite.JDBC";
-    private final String url = "jdbc:sqlite:Auth.db";
+    private Connection connection;
 
     public DBUtil() throws SQLException {
+        String driver = "org.sqlite.JDBC";
         DbUtils.loadDriver(driver);
         setupConnection();
     }
 
-    public void setupConnection() throws SQLException {
+    private void setupConnection() throws SQLException {
+        String url = "jdbc:sqlite:Auth.db";
         connection = DriverManager.getConnection(url);
     }
 

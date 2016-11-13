@@ -1,12 +1,12 @@
 package app;
 
-public class AccountClass implements Account {
+class AccountClass implements Account {
 	private String name;
 	private String pwd;
 	private boolean logged_in;
 	private boolean locked;
 
-	public AccountClass(String name, String pwd) {
+	AccountClass(String name, String pwd) {
 		this.name = name;
 		this.pwd = pwd;
 		this.logged_in = false;

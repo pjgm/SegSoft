@@ -13,7 +13,7 @@ import java.sql.SQLException;
 @WebListener
 public class ContainerListener implements ServletContextListener {
 
-    protected DBUtil db;
+    private DBUtil db;
     // throwing RunTimeException makes the tomcat container exit
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {

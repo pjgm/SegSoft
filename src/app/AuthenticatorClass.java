@@ -3,7 +3,6 @@ package app;
 import exceptions.*;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +36,7 @@ public class AuthenticatorClass implements Authenticator {
         }
     }
 
-    public void setupDatabase() throws ClassNotFoundException, SQLException {
+    private void setupDatabase() throws ClassNotFoundException, SQLException {
         PreparedStatement ct = c.prepareStatement(CREATETABLESQL);
         ct.executeUpdate();
     }
@@ -46,12 +45,11 @@ public class AuthenticatorClass implements Authenticator {
         return accountExists("root");
     }
 
-    public boolean accountExists(String name) throws SQLException, ClassNotFoundException {
+    private boolean accountExists(String name) throws SQLException, ClassNotFoundException {
         PreparedStatement sbn;
         sbn = c.prepareStatement(SELECTBYNAMESQL);
         sbn.setString(1, name);
-        boolean exists = sbn.executeQuery().next();
-        return exists;
+        return sbn.executeQuery().next();
     }
 
     public void create_account(String name, String pwd1, String pwd2)

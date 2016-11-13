@@ -22,11 +22,11 @@ public abstract class AbstractServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final int SESSIONTIMEOUT = 15 * 60;
 
-    protected static final Logger LOGGER = Logger.getLogger(AbstractServlet.class.getName());
+    static final Logger LOGGER = Logger.getLogger(AbstractServlet.class.getName());
     private static final String PASSWORDPATTERN = "((?=.*[a-z]).{8,64})";
 
-    protected Authenticator auth;
-    protected boolean isSetupDone;
+    Authenticator auth;
+    private boolean isSetupDone;
 
     @Override
     public void init() {
@@ -108,7 +108,7 @@ public abstract class AbstractServlet extends HttpServlet {
     /**
      * Checks if the logged in user is root
      */
-    protected boolean isRoot(HttpServletRequest request) {
+    boolean isRoot(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         return session.getAttribute("USER").toString().equals("root");
     }
