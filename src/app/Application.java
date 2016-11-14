@@ -25,17 +25,6 @@ public class Application implements Authenticator {
         this.qr = new QueryRunner(dataSource);
         qr.update(CREATETABLESQL);
         rsh = new BeanHandler(AccountClass.class);
-        try {
-            create_account("root", "teste123", "teste123");
-        } catch (PasswordMismatchException e) {
-            e.printStackTrace();
-        } catch (ExistingAccountException e) {
-            e.printStackTrace();
-        } catch (EmptyFieldException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean isSetupDone() throws SQLException, ClassNotFoundException {
@@ -47,7 +36,8 @@ public class Application implements Authenticator {
         return acc != null;
     }
 
-    public void create_account(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, ExistingAccountException, EmptyFieldException, ClassNotFoundException {
+    public void create_account(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException,
+            ExistingAccountException, EmptyFieldException, ClassNotFoundException {
         if (name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
             throw new EmptyFieldException();
 
@@ -58,13 +48,7 @@ public class Application implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        Account acc = (Account) qr.insert(INSERTUSERSQL, rsh, name, pwd1, 0, 0, salt);
-
-        boolean success = acc != null;
-        if(success)
-            System.out.println("Successfully inserted user");
-        else
-            System.out.println("Error inserting user");
+        qr.insert(INSERTUSERSQL, rsh, name, pwd1, 0, 0, salt);
     }
 
     public void delete_account(String name) throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException {
