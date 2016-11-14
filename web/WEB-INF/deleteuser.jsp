@@ -8,9 +8,9 @@
 </head>
 <body>
 	<h1>Deletes a User</h1>
-	<form name="deleteUserForm" method="post" action="DeleteUser">
+	<form username="deleteUserForm" method="post" action="DeleteUser">
 		<div style="color: #FF0000;">${errorMessage}</div>
-		Username: <input type="text" name="username" /> <br /> <input
+		Username: <input type="text" username="username" /> <br /> <input
 			type="submit" value="Submit" />
 	</form>
 </body>

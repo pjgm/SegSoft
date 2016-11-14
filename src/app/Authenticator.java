@@ -1,6 +1,7 @@
 package app;
 
 import exceptions.*;
+import model.Account;
 
 import java.sql.SQLException;
 

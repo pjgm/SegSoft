@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import app.*;
 import exceptions.*;
+import model.Account;
 
 @WebServlet(name = "AbstractServlet")
 public abstract class AbstractServlet extends HttpServlet {
@@ -48,7 +49,7 @@ public abstract class AbstractServlet extends HttpServlet {
 
         try {
             Account user = auth.login(request, response);
-            LOGGER.log(Level.FINE, "LOGIN " + user.get_account_name());
+            LOGGER.log(Level.FINE, "LOGIN " + user.getUsername());
             return user;
         } catch (AuthenticationErrorException | SQLException | UndefinedAccountException | LockedAccountException | ClassNotFoundException e) {
             request.setAttribute("errorMessage", e.getMessage());
@@ -92,10 +93,10 @@ public abstract class AbstractServlet extends HttpServlet {
 
         try {
             Account authUser = auth.login(username, password);
-            LOGGER.log(Level.FINE, "LOGIN " + authUser.get_account_name());
+            LOGGER.log(Level.FINE, "LOGIN " + authUser.getUsername());
             HttpSession session = request.getSession(true);
-            session.setAttribute("USER", authUser.get_account_name());
-            session.setAttribute("PWD", authUser.get_account_pwd());
+            session.setAttribute("USER", authUser.getUsername());
+            session.setAttribute("PWD", authUser.getPassword());
             session.setMaxInactiveInterval(SESSIONTIMEOUT);
             request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         } catch (SQLException | UndefinedAccountException | LockedAccountException | EmptyFieldException |

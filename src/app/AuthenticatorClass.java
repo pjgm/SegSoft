@@ -1,3 +1,4 @@
+/*
 package app;
 
 import exceptions.*;
@@ -7,13 +8,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.activation.DataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.crypto.Data;
 
 public class AuthenticatorClass implements Authenticator {
 
-    private Connection c;
+    private DataSource ds;
 
     private static final String CREATETABLESQL = "create table if not exists account (name string, pwd string, logged integer, locked integer, salt string)";
     private static final String SELECTBYNAMESQL = "select * from account where name LIKE ?";
@@ -27,8 +30,8 @@ public class AuthenticatorClass implements Authenticator {
     private static final String LOGINBYNAMESQL = "update account set logged = 1 where name LIKE ?";
     private static final String LOGOUTBYNAMESQL = "update account set logged = 0 where name LIKE ?";
 
-    public AuthenticatorClass(Connection c) {
-        this.c = c;
+    public AuthenticatorClass(DataSource ds) {
+        this.ds = ds;
         try {
             setupDatabase();
         } catch (ClassNotFoundException | SQLException e) {
@@ -257,4 +260,4 @@ public class AuthenticatorClass implements Authenticator {
 
         return a;
     }
-}
+}*/

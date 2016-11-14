@@ -7,7 +7,7 @@
 <title>Logout Page</title>
 </head>
 <body>
-	<form name="LogoutForm" method="post" action="Logout">
+	<form username="LogoutForm" method="post" action="Logout">
 		<div style="color: #FF0000;">${errorMessage}</div>
 		<input type="submit" value="Click here to logout" />
 	</form>

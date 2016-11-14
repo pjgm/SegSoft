@@ -8,11 +8,11 @@
 </head>
 <body>
 	<h1>Create a new User</h1>
-	<form name="createUserForm" method="post" action="CreateUser">
+	<form username="createUserForm" method="post" action="CreateUser">
 		<div style="color: #FF0000;">${errorMessage}</div>
-		Username: <input type="text" name="username" /> <br /> Password: <input
-			type="password" name="password" /> <br /> Confirm Password: <input
-			type="password" name="password2" /> <br /> <input type="submit"
+		Username: <input type="text" username="username" /> <br /> Password: <input
+			type="password" username="password" /> <br /> Confirm Password: <input
+			type="password" username="password2" /> <br /> <input type="submit"
 			value="Submit" />
 	</form>
 </body>

@@ -1,8 +1,8 @@
 package servletContainer;
 
+import app.Application;
 import app.Authenticator;
-import app.AuthenticatorClass;
-import database.DBUtil;
+import database.DataSourceManager;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.ServletContext;
@@ -13,22 +13,19 @@ import java.sql.SQLException;
 @WebListener
 public class ContainerListener implements ServletContextListener {
 
-    private DBUtil db;
+    private DataSourceManager cm;
     // throwing RunTimeException makes the tomcat container exit
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-        try {
-            db = new DBUtil();
-        } catch (SQLException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        cm = new DataSourceManager();
 
         ServletContext sc = servletContextEvent.getServletContext();
-        Authenticator auth = new AuthenticatorClass(db.getConnection());
-        sc.setAttribute("authenticator", auth);
+        Authenticator auth;
 
         try {
+            auth = new Application(cm.getDataSource());
+            sc.setAttribute("authenticator", auth);
             sc.setAttribute("isSetupDone", auth.isSetupDone());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e.getMessage());
@@ -37,15 +34,6 @@ public class ContainerListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        try {
-            closeDBConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void closeDBConnection() throws SQLException {
-        if (db.getConnection() != null)
-            db.closeConnection();
     }
 }

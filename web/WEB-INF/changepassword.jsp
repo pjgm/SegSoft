@@ -8,11 +8,11 @@
 </head>
 <body>
 	<h1>Change the Password</h1>
-	<form name="ChangePasswordForm" method="post" action="ChangePassword">
+	<form username="ChangePasswordForm" method="post" action="ChangePassword">
 		<div style="color: #FF0000;">${errorMessage}</div>
-		Username: <input type="text" name="username" /> <br /> New password:
-		<input type="password" name="password" /> <br /> Confirm New
-		Password: <input type="password" name="password2" /> <br /> <input
+		Username: <input type="text" username="username" /> <br /> New password:
+		<input type="password" username="password" /> <br /> Confirm New
+		Password: <input type="password" username="password2" /> <br /> <input
 			type="submit" value="Submit" />
 	</form>
 </body>
