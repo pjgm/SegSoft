@@ -1,11 +1,6 @@
 package database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.apache.commons.dbutils.DbUtils;
-
-import javax.activation.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 public class DataSourceManager {
 
@@ -19,7 +14,6 @@ public class DataSourceManager {
         dataSource = new BasicDataSource();
         dataSource.setDriverClassName(DRIVER);
         dataSource.setUrl(URL);
-        //dataSource.setDefaultAutoCommit(true);
     }
 
     public BasicDataSource getDataSource() {

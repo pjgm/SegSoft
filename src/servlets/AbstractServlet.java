@@ -91,6 +91,7 @@ public abstract class AbstractServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+        //TODO: Account object as attribute to replace USER and PWD
         try {
             Account authUser = auth.login(username, password);
             LOGGER.log(Level.FINE, "LOGIN " + authUser.getUsername());
@@ -101,6 +102,7 @@ public abstract class AbstractServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         } catch (SQLException | UndefinedAccountException | LockedAccountException | EmptyFieldException |
                 AuthenticationErrorException | ClassNotFoundException e) {
+            //TODO: SQLExceptions may reveal sensitive information to the end user
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }

@@ -29,6 +29,7 @@ public class ChangePassword extends AbstractServlet {
 	}
 
 	//TODO: User gets logged out after password change, fix?
+	//TODO: Password change should only work for own user
 	@Override
 	protected void processPostRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
