@@ -7,7 +7,7 @@
     <title>Login</title>
 </head>
 <body>
-<form name="LoginForm" method="post" action="/">
+<form name="LoginForm" method="post" action="/Login">
     <div style="color: #FF0000;">${errorMessage}</div>
     Username: <input
         type="text" name="username"/>

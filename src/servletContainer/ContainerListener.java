@@ -14,7 +14,6 @@ import java.sql.SQLException;
 public class ContainerListener implements ServletContextListener {
 
     private DataSourceManager cm;
-    // throwing RunTimeException makes the tomcat container exit
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
@@ -29,6 +28,7 @@ public class ContainerListener implements ServletContextListener {
             sc.setAttribute("isSetupDone", auth.isSetupDone());
         } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e.getMessage());
+            // throwing RunTimeException makes the tomcat container exit
         }
     }
 

@@ -84,6 +84,7 @@ public class Application implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
+        //TODO: Combine SQL updates
         qr.update(UPDATEPWDSQL, pwd1, name);
         qr.update(UPDATESALTSQL, salt, name);
     }
@@ -121,22 +122,12 @@ public class Application implements Authenticator {
     }
 
     public Account login(HttpServletRequest req, HttpServletResponse resp) throws SQLException, UndefinedAccountException, LockedAccountException, AuthenticationErrorException, ClassNotFoundException {
-        Account a;
-
         HttpSession session = req.getSession(false);
-        String username = session.getAttribute("USER").toString();
-        String pwhash = session.getAttribute("PWD").toString();
-        a = get_account(username);
+        Account acc = (Account) session.getAttribute("USER");
 
-        if (a == null)
-            throw new UndefinedAccountException();
-
-        if (!a.getPassword().equals(pwhash))
+        if (acc == null)
             throw new AuthenticationErrorException();
 
-        if (a.getLocked() == 1)
-            throw new LockedAccountException("The account is locked");
-
-        return a;
+        return acc;
     }
 }
