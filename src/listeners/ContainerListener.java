@@ -1,6 +1,6 @@
-package servletContainer;
+package listeners;
 
-import app.Application;
+import app.AuthenticatorClass;
 import app.Authenticator;
 import database.DataSourceManager;
 
@@ -13,17 +13,16 @@ import java.sql.SQLException;
 @WebListener
 public class ContainerListener implements ServletContextListener {
 
-    private DataSourceManager cm;
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
 
-        cm = new DataSourceManager();
+        DataSourceManager cm = new DataSourceManager();
 
         ServletContext sc = servletContextEvent.getServletContext();
         Authenticator auth;
 
         try {
-            auth = new Application(cm.getDataSource());
+            auth = new AuthenticatorClass(cm.getDataSource());
             sc.setAttribute("authenticator", auth);
             sc.setAttribute("isSetupDone", auth.isSetupDone());
         } catch (SQLException | ClassNotFoundException e) {
@@ -34,6 +33,6 @@ public class ContainerListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        System.out.println("container destroyed");
+
     }
 }

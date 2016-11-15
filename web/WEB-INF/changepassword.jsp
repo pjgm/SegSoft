@@ -7,12 +7,18 @@
     <title>Change Password</title>
 </head>
 <body>
+<a href="/">home</a>
+<a href="/CreateUser">create_user</a>
+<a href="/DeleteUser">delete_user</a>
+<a href="/ChangePassword">change_pwd</a>
+<a href="/Logout">logout</a>
 <h1>Change the Password</h1>
 <form name="ChangePasswordForm" method="post" action="ChangePassword">
-    <div style="color: #FF0000;">${errorMessage}</div>
-    Username: <input type="text" name="username"/> <br/> New password:
+    <div style="color: RED;">${errorMessage}</div>
+    New password:
     <input type="password" name="password"/> <br/> Confirm New
-    Password: <input type="password" name="password2"/> <br/> <input
+    Password:
+    <input type="password" name="password2"/> <br/> <input
         type="submit" value="Submit"/>
 </form>
 </body>

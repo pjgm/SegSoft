@@ -7,6 +7,11 @@
     <title>Logout Page</title>
 </head>
 <body>
+<a href="/">home</a>
+<a href="/CreateUser">create_user</a>
+<a href="/DeleteUser">delete_user</a>
+<a href="/ChangePassword">change_pwd</a>
+<a href="/Logout">logout</a>
 <form name="LogoutForm" method="post" action="Logout">
     <div style="color: #FF0000;">${errorMessage}</div>
     <input type="submit" value="Click here to logout"/>

@@ -1,63 +1,48 @@
-/*
 package app;
 
 import exceptions.*;
+import model.Account;
+import model.AccountClass;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import javax.activation.DataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
+import java.sql.SQLException;
 
 public class AuthenticatorClass implements Authenticator {
 
-    private DataSource ds;
+    private static final String CREATETABLESQL = "create table if not exists account (username string primary key, password string, loggedIn integer, locked integer, salt string)";
+    private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
+    private static final String INSERTUSERSQL = "insert into account (username, password, loggedIn, locked, salt) values (?, ?, ?, ?, ?)";
+    private static final String DELETEBYNAMESQL = "delete from account where username LIKE ?";
+    private static final String UPDATEPASSWORDSQL = "update account set password = ?, salt = ? where username LIKE ?";
+    private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
+    private static final String LOGOUTBYNAMESQL = "update account set loggedIn = 0 where username LIKE ?";
 
-    private static final String CREATETABLESQL = "create table if not exists account (name string, pwd string, logged integer, locked integer, salt string)";
-    private static final String SELECTBYNAMESQL = "select * from account where name LIKE ?";
-    private static final String INSERTUSERSQL = "insert into account (name, pwd, logged, locked, salt) values (?, ?, ?, ?, ?)";
-    private static final String SELECTLOGGEDSQL = "select * from account where name LIKE ? and logged == 1";
-    private static final String SELECTLOCKEDSQL = "select * from account where name LIKE ? and locked == 1";
-    private static final String DELETEBYNAMESQL = "delete from account where name LIKE ?";
-    private static final String UPDATEPWDSQL = "update account set pwd = ? where name LIKE ?";
-    private static final String UPDATESALTSQL = "update account set salt = ? where name LIKE ?";
-    private static final String SELECTBYPWDSQL = "select * from account where pwd LIKE ?";
-    private static final String LOGINBYNAMESQL = "update account set logged = 1 where name LIKE ?";
-    private static final String LOGOUTBYNAMESQL = "update account set logged = 0 where name LIKE ?";
+    private QueryRunner qr;
+    private ResultSetHandler rsh;
 
-    public AuthenticatorClass(DataSource ds) {
-        this.ds = ds;
-        try {
-            setupDatabase();
-        } catch (ClassNotFoundException | SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    private void setupDatabase() throws ClassNotFoundException, SQLException {
-        PreparedStatement ct = c.prepareStatement(CREATETABLESQL);
-        ct.executeUpdate();
+    public AuthenticatorClass(BasicDataSource dataSource) throws SQLException {
+        this.qr = new QueryRunner(dataSource);
+        qr.update(CREATETABLESQL);
+        rsh = new BeanHandler(AccountClass.class);
     }
 
     public boolean isSetupDone() throws SQLException, ClassNotFoundException {
-        return accountExists("root");
+        return account_exists("root");
     }
 
-    private boolean accountExists(String name) throws SQLException, ClassNotFoundException {
-        PreparedStatement sbn;
-        sbn = c.prepareStatement(SELECTBYNAMESQL);
-        sbn.setString(1, name);
-        return sbn.executeQuery().next();
+    private boolean account_exists(String name) throws SQLException {
+        Account acc = (AccountClass) qr.query(SELECTBYNAMESQL, rsh, name);
+        return acc != null;
     }
 
-    public void create_account(String name, String pwd1, String pwd2)
-            throws SQLException, PasswordMismatchException, ExistingAccountException, EmptyFieldException, ClassNotFoundException {
-
+    public void create_account(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException,
+            ExistingAccountException, EmptyFieldException, ClassNotFoundException {
         if (name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
             throw new EmptyFieldException();
 
@@ -68,84 +53,26 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-
-        PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
-        sbn.setString(1, name);
-        ResultSet rs = sbn.executeQuery();
-        if (!rs.next()) {
-            PreparedStatement iu = c.prepareStatement(INSERTUSERSQL);
-            iu.setString(1, name);
-            iu.setString(2, pwd1);
-            iu.setInt(3, 0);
-            iu.setInt(4, 0);
-            iu.setString(5, salt);
-            iu.executeUpdate();
-        } else {
-            throw new ExistingAccountException();
-        }
-
+        qr.insert(INSERTUSERSQL, rsh, name, pwd1, 0, 0, salt);
     }
 
-    public void delete_account(String name)
-            throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException {
-
-
-        PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
-        sbn.setString(1, name);
-        ResultSet rs = sbn.executeQuery();
-        if (!rs.next()) {
+    public void delete_account(String name) throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException {
+        Account acc = get_account(name);
+        if (acc == null)
             throw new UndefinedAccountException();
-        }
-
-        PreparedStatement slg = c.prepareStatement(SELECTLOGGEDSQL);
-        slg.setString(1, name);
-        rs = slg.executeQuery();
-        if (rs.next()) {
+        if (acc.getLoggedIn() == 1)
             throw new AccountConnectionException();
-        }
+        if (acc.getLocked() == 0)
+            throw new LockedAccountException("The account is not locked");
 
-        PreparedStatement slc = c.prepareStatement(SELECTLOCKEDSQL);
-        slc.setString(1, name);
-        rs = slc.executeQuery();
-        if (!rs.next()) {
-            throw new LockedAccountException("The account is unlocked, can't delete");
-        }
-
-        PreparedStatement dbn = c.prepareStatement(DELETEBYNAMESQL);
-        dbn.setString(1, name);
-        dbn.executeUpdate();
-
+        qr.update(DELETEBYNAMESQL, name);
     }
 
     public Account get_account(String name) throws SQLException, UndefinedAccountException, ClassNotFoundException {
-
-        Account a;
-
-        PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
-        sbn.setString(1, name);
-        ResultSet rs = sbn.executeQuery();
-        if (rs.next()) {
-            String n = rs.getString("name");
-            String p = rs.getString("pwd");
-            int log = rs.getInt("logged");
-            int lock = rs.getInt("locked");
-
-            a = new AccountClass(n, p);
-            if (log == 1)
-                a.log_in();
-            if (lock == 1)
-                a.lock();
-        } else {
-            throw new UndefinedAccountException();
-        }
-
-
-        return a;
+        return (AccountClass) qr.query(SELECTBYNAMESQL, rsh, name);
     }
 
-    public void change_pwd(String name, String pwd1, String pwd2)
-            throws SQLException, PasswordMismatchException, EmptyFieldException, ClassNotFoundException {
-
+    public void change_pwd(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, EmptyFieldException, ClassNotFoundException {
         if (name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
             throw new EmptyFieldException();
 
@@ -156,108 +83,48 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-
-        PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
-        sbn.setString(1, name);
-        ResultSet rs = sbn.executeQuery();
-        if (rs.next()) {
-            PreparedStatement up = c.prepareStatement(UPDATEPWDSQL);
-            up.setString(1, pwd1);
-            up.setString(2, name);
-            up.executeUpdate();
-
-            PreparedStatement us = c.prepareStatement(UPDATESALTSQL);
-            us.setString(1, salt);
-            us.setString(2, name);
-            us.executeUpdate();
-        }
+        qr.update(UPDATEPASSWORDSQL, pwd1, salt, name);
     }
 
-    public Account login(String name, String pwd) throws SQLException, UndefinedAccountException,
-            LockedAccountException, EmptyFieldException, AuthenticationErrorException, ClassNotFoundException {
-
+    public Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException, EmptyFieldException, AuthenticationErrorException, ClassNotFoundException {
         if (name == null || pwd == null)
             throw new AuthenticationErrorException();
 
         if (name.isEmpty() || pwd.isEmpty())
             throw new EmptyFieldException();
 
-        Account a = null;
+        Account acc = (AccountClass) qr.query(SELECTBYNAMESQL, rsh, name);
 
-
-        PreparedStatement sbn = c.prepareStatement(SELECTBYNAMESQL);
-        sbn.setString(1, name);
-        ResultSet rs = sbn.executeQuery();
-        if (!rs.next()) {
+        if (acc == null)
             throw new UndefinedAccountException();
-        }
 
         PasswordHashGenerator phg = new PasswordHashGenerator(pwd);
-        String salt = rs.getString("salt");
+        String salt = acc.getSalt();
         pwd = phg.createNewHash(salt, pwd);
 
-        PreparedStatement slc = c.prepareStatement(SELECTLOCKEDSQL);
-        slc.setString(1, name);
-        rs = slc.executeQuery();
-        if (rs.next()) {
-            throw new LockedAccountException("The account is locked");
-        }
-
-        PreparedStatement sbp = c.prepareStatement(SELECTBYPWDSQL);
-        sbp.setString(1, pwd);
-        rs = sbp.executeQuery();
-        if (!rs.next()) {
+        if (!acc.getPassword().equals(pwd))
             throw new AuthenticationErrorException();
-        }
 
-        rs = sbn.executeQuery();
-        if (rs.next()) {
-            String n = rs.getString("name");
-            String p = rs.getString("pwd");
+        if(acc.getLocked() == 1)
+            throw new LockedAccountException("This account is locked");
 
-            PreparedStatement lbn = c.prepareStatement(LOGINBYNAMESQL);
-            lbn.setString(1, name);
-            lbn.executeUpdate();
+        qr.update(LOGINBYNAMESQL, name);
 
-            a = new AccountClass(n, p);
-            a.log_in();
-        }
-
-        return a;
+        return acc;
     }
 
     public void logout(Account acc) throws SQLException, ClassNotFoundException {
-
-        String name = acc.get_account_name();
-
-        PreparedStatement slg = c.prepareStatement(SELECTLOGGEDSQL);
-        slg.setString(1, name);
-        ResultSet rs = slg.executeQuery();
-        if (rs.next()) {
-            PreparedStatement lbn = c.prepareStatement(LOGOUTBYNAMESQL);
-            lbn.setString(1, name);
-            lbn.executeUpdate();
-        }
+        System.out.println("logout");
+        qr.update(LOGOUTBYNAMESQL, acc.getUsername());
     }
 
-    public Account login(HttpServletRequest req, HttpServletResponse resp)
-            throws SQLException, UndefinedAccountException, LockedAccountException, AuthenticationErrorException, ClassNotFoundException {
-        Account a;
-
+    public Account login(HttpServletRequest req, HttpServletResponse resp) throws SQLException, UndefinedAccountException, LockedAccountException, AuthenticationErrorException, ClassNotFoundException {
         HttpSession session = req.getSession(false);
-        String username = session.getAttribute("USER").toString();
-        String pwhash = session.getAttribute("PWD").toString();
-        a = get_account(username);
+        Account acc = (Account) session.getAttribute("USER");
 
-        if (a == null)
-            throw new UndefinedAccountException();
-
-        if (!a.get_account_pwd().equals(pwhash))
+        if (acc == null)
             throw new AuthenticationErrorException();
 
-        if (a.is_locked())
-            throw new LockedAccountException("The account is locked");
-
-        return a;
+        return acc;
     }
-}*/
+}

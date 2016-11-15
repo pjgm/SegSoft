@@ -7,6 +7,11 @@
     <title>Create User</title>
 </head>
 <body>
+<a href="/">home</a>
+<a href="/CreateUser">create_user</a>
+<a href="/DeleteUser">delete_user</a>
+<a href="/ChangePassword">change_pwd</a>
+<a href="/Logout">logout</a>
 <h1>Create a new User</h1>
 <form name="createUserForm" method="post" action="CreateUser">
     <div style="color: #FF0000;">${errorMessage}</div>
