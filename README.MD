@@ -3,13 +3,13 @@
 ## Installation Instructions
 
 After installing Apache Tomcat 9, you need to install a few libraries to run to program:
-.Servet API, contained in the Tomcat installation folder (inside lib).
-.[SQLite JDBC] (we used version 3.14.2).
-.Four Apache Commons:
-	.[DBCP]
-	.[DbUtils]
-	.[Logging]
-	.[Pool]
+1. Servet API, contained in the Tomcat installation folder (inside lib).
+1. [SQLite JDBC] (we used version 3.14.2).
+1. Four Apache Commons:
+	2.[DBCP]
+	2.[DbUtils]
+	2.[Logging]
+	2.[Pool]
 
 ## Running Instructions
 
