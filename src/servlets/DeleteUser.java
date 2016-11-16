@@ -20,7 +20,7 @@ import exceptions.LockedAccountException;
 import exceptions.UndefinedAccountException;
 import model.Account;
 
-@WebServlet("/DeleteUser")
+@WebServlet(name = "DeleteUser", urlPatterns = { "/DeleteUser" })
 public class DeleteUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = Logger.getLogger(DeleteUser.class.getName());

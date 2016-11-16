@@ -20,7 +20,7 @@ import exceptions.ExistingAccountException;
 import exceptions.PasswordMismatchException;
 import model.Account;
 
-@WebServlet("/CreateUser")
+@WebServlet(name = "CreateUser", urlPatterns = { "/CreateUser" })
 public class CreateUser extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger LOGGER = Logger.getLogger(CreateUser.class.getName());

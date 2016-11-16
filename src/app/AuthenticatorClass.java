@@ -29,7 +29,7 @@ public class AuthenticatorClass implements Authenticator {
     public AuthenticatorClass(BasicDataSource dataSource) throws SQLException {
         this.qr = new QueryRunner(dataSource);
         qr.update(CREATETABLESQL);
-        rsh = new BeanHandler(AccountClass.class);
+        rsh = new BeanHandler<>(AccountClass.class);
     }
 
     public boolean isSetupDone() throws SQLException, ClassNotFoundException {
@@ -114,7 +114,6 @@ public class AuthenticatorClass implements Authenticator {
     }
 
     public void logout(Account acc) throws SQLException, ClassNotFoundException {
-        System.out.println("logout");
         qr.update(LOGOUTBYNAMESQL, acc.getUsername());
     }
 

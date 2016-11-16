@@ -17,7 +17,7 @@ import exceptions.UndefinedAccountException;
 import model.Account;
 import model.AccountClass;
 
-@WebServlet("/Logout")
+@WebServlet(name = "Logout", urlPatterns = { "/Logout" })
 public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = Logger.getLogger(Logout.class.getName());

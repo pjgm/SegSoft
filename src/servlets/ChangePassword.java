@@ -20,7 +20,7 @@ import exceptions.PasswordMismatchException;
 import model.Account;
 import model.AccountClass;
 
-@WebServlet("/ChangePassword")
+@WebServlet(name = "ChangePassword", urlPatterns = { "/ChangePassword" })
 public class ChangePassword extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Authenticator auth;

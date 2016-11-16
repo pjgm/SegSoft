@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-@WebServlet(description = "Login", urlPatterns = { "/Login" })
+@WebServlet(name = "Login", urlPatterns = { "/Login" })
 public class Login extends HttpServlet {
 
     private static final int SESSIONTIMEOUT = 15 * 60;

@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 //Info on servlet url patterns: http://stackoverflow.com/questions/4140448/difference-between-and-in-servlet-mapping-url-pattern
 
-@WebServlet(description = "Home Page", urlPatterns = { "/Home", "/" })
+@WebServlet(name = "Home Page", urlPatterns = { "/Home", "/" })
 public class Home extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
