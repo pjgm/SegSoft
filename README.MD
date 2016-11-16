@@ -1,4 +1,4 @@
-# SegSoft Homework
+# SegSoft Assignment
 
 ## Installation Instructions
 
