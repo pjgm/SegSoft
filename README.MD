@@ -1,4 +1,4 @@
-# SegSoft Assignment
+# SegSoft Assignment 1
 
 ## Installation Instructions
 
