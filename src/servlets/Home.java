@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "Home Page", urlPatterns = { "/Home", "/" })
 public class Home extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

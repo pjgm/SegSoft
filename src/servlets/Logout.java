@@ -13,13 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import app.Authenticator;
-import exceptions.UndefinedAccountException;
 import model.Account;
 import model.AccountClass;
 
 @WebServlet(name = "Logout", urlPatterns = { "/Logout" })
 public class Logout extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
 	private static final Logger LOGGER = Logger.getLogger(Logout.class.getName());
 	private Authenticator auth;
 
@@ -28,22 +27,22 @@ public class Logout extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/logout.jsp").forward(request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		HttpSession session = request.getSession(false);
 		Account acc = (AccountClass) session.getAttribute("USER");
+
 		try {
 			auth.logout(acc);
 			session.invalidate();
 			LOGGER.log(Level.FINE, "LOGOUT " + acc.getUsername());
 			request.setAttribute("errorMessage", "Logout successful");
-		} catch (SQLException | ClassNotFoundException e) {
+		} catch (SQLException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
 			request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);

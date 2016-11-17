@@ -3,8 +3,6 @@ package servlets;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.logging.Level;
 
 import javax.servlet.ServletException;
@@ -19,18 +17,18 @@ import exceptions.EmptyFieldException;
 import exceptions.ExistingAccountException;
 import exceptions.PasswordMismatchException;
 import model.Account;
+import validator.Validator;
 
 @WebServlet(name = "CreateUser", urlPatterns = { "/CreateUser" })
 public class CreateUser extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+
     private static final Logger LOGGER = Logger.getLogger(CreateUser.class.getName());
     private Authenticator auth;
-
-    private static final String USERNAMEPATTERN = "^[a-z0-9]{2,16}$";
-    private static final String PASSWORDPATTERN = "((?=.*[a-z]).{8,64})";
+    private Validator val;
 
     public void init() {
         this.auth = (Authenticator) getServletContext().getAttribute("authenticator");
+        this.val = new Validator();
     }
 
     private boolean isRoot(HttpServletRequest request) {
@@ -51,8 +49,8 @@ public class CreateUser extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         if (!isRoot(request)) {
             response.getOutputStream().print("Error: You have no permission to access this page");
             return;
@@ -62,17 +60,13 @@ public class CreateUser extends HttpServlet {
         String password = request.getParameter("password");
         String password2 = request.getParameter("password2");
 
-        Pattern p1 = Pattern.compile(USERNAMEPATTERN);
-        Matcher m1 = p1.matcher(username);
-        if (!m1.matches()) {
+        if (!val.validateUsername(username)) {
             request.setAttribute("errorMessage", "Username has invalid format");
             request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
             return;
         }
 
-        Pattern p2 = Pattern.compile(PASSWORDPATTERN);
-        Matcher m2 = p2.matcher(password);
-        if (!m2.matches()) {
+        if (!val.validatePassword(password)) {
             request.setAttribute("errorMessage", "Password has invalid format");
             request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
             return;
@@ -82,7 +76,7 @@ public class CreateUser extends HttpServlet {
             LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
             auth.create_account(username, password, password2);
             request.setAttribute("errorMessage", "User created successfully");
-        } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException | ClassNotFoundException e) {
+        } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());
         } finally {
             request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);

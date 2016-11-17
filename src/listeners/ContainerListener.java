@@ -25,7 +25,7 @@ public class ContainerListener implements ServletContextListener {
             auth = new AuthenticatorClass(cm.getDataSource());
             sc.setAttribute("authenticator", auth);
             sc.setAttribute("isSetupDone", auth.isSetupDone());
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
             // throwing RunTimeException makes the tomcat container exit
         }

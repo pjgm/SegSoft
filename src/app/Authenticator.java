@@ -5,31 +5,24 @@ import model.Account;
 
 import java.sql.SQLException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 public interface Authenticator {
 
-	//void closeDatabaseConnection() throws SQLException;
-
-	boolean isSetupDone() throws SQLException, ClassNotFoundException;
+	boolean isSetupDone() throws SQLException;
 
 	void create_account(String name, String pwd1, String pwd2)
-			throws SQLException, PasswordMismatchException, ExistingAccountException, EmptyFieldException, ClassNotFoundException;
+			throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException;
 
 	void delete_account(String name)
 			throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException;
 
-	Account get_account(String name) throws SQLException, UndefinedAccountException, ClassNotFoundException;
+	Account get_account(String name) throws SQLException;
 
 	void change_pwd(String name, String pwd1, String pwd2)
-			throws SQLException, PasswordMismatchException, EmptyFieldException, ClassNotFoundException;
+			throws SQLException, PasswordMismatchException, EmptyFieldException;
 
 	Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException,
-			EmptyFieldException, AuthenticationErrorException, ClassNotFoundException;
+			EmptyFieldException, AuthenticationErrorException;
 
-	void logout(Account acc) throws SQLException, ClassNotFoundException;
+	void logout(Account acc) throws SQLException;
 
-	Account login(HttpServletRequest req, HttpServletResponse resp)
-			throws SQLException, UndefinedAccountException, LockedAccountException, AuthenticationErrorException, ClassNotFoundException;
 }

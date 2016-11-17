@@ -4,7 +4,6 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 public class DataSourceManager {
 
-    //TODO: Set parameters from config file
     private static final String DRIVER = "org.sqlite.JDBC";
     private static final String URL = "jdbc:sqlite:Auth.db";
 

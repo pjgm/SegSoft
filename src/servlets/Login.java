@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 @WebServlet(name = "Login", urlPatterns = { "/Login" })
 public class Login extends HttpServlet {
 
-    private static final int SESSIONTIMEOUT = 15 * 60;
+    private static final int SESSIONTIMEOUT = 15 * 60; // 15 minutes
     private static final Logger LOGGER = Logger.getLogger(Login.class.getName());
 
     private Authenticator auth;
@@ -48,8 +48,7 @@ public class Login extends HttpServlet {
             session.setMaxInactiveInterval(SESSIONTIMEOUT);
             request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         } catch (SQLException | UndefinedAccountException | LockedAccountException | EmptyFieldException |
-                AuthenticationErrorException | ClassNotFoundException e) {
-            //TODO: SQLExceptions may reveal sensitive information to the end user
+                AuthenticationErrorException e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         }

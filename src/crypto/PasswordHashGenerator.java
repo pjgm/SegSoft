@@ -1,4 +1,4 @@
-package app;
+package crypto;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
@@ -8,12 +8,12 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-class PasswordHashGenerator {
+public class PasswordHashGenerator {
 
 	private byte[] salt;
 	private byte[] hash;
 
-	PasswordHashGenerator(String password) {
+	public PasswordHashGenerator(String password) {
 		salt = new byte[16];
 		SecureRandom random = new SecureRandom();
 		random.nextBytes(salt);
@@ -35,7 +35,7 @@ class PasswordHashGenerator {
 		}
 	}
 
-	String createNewHash(String salt, String password) {
+	public String createNewHash(String salt, String password) {
 		Base64.Decoder dec = Base64.getDecoder();
 		this.salt = dec.decode(salt);
 
@@ -60,13 +60,13 @@ class PasswordHashGenerator {
 		return enc.encodeToString(hash);
 	}
 
-	String getHash() {
+	public String getHash() {
 		Base64.Encoder enc = Base64.getEncoder();
 
 		return enc.encodeToString(hash);
 	}
 
-	String getSalt() {
+	public String getSalt() {
 		Base64.Encoder enc = Base64.getEncoder();
 
 		return enc.encodeToString(salt);

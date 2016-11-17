@@ -3,8 +3,6 @@ package servlets;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.logging.Level;
 
 import javax.servlet.ServletException;
@@ -22,7 +20,7 @@ import model.Account;
 
 @WebServlet(name = "DeleteUser", urlPatterns = { "/DeleteUser" })
 public class DeleteUser extends HttpServlet {
-	private static final long serialVersionUID = 1L;
+
 	private static final Logger LOGGER = Logger.getLogger(DeleteUser.class.getName());
 	private Authenticator auth;
 
@@ -36,36 +34,25 @@ public class DeleteUser extends HttpServlet {
 		return acc.getUsername().equals("root");
 	}
 
-	private static final String USERNAMEPATTERN = "^[a-z0-9]{2,16}$";
-
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		if (!isRoot(request)) {
 			response.getOutputStream().print("Error: You have no permission to access this page");
 			return;
 		}
-
 		request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		if (!isRoot(request)) {
 			response.getOutputStream().print("Error: You have no permission to access this page");
 			return;
 		}
 
 		String username = request.getParameter("username");
-
-		Pattern p1 = Pattern.compile(USERNAMEPATTERN);
-		Matcher m1 = p1.matcher(username);
-		if (!m1.matches()) {
-			request.setAttribute("errorMessage", "Username has invalid format");
-			request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
-			return;
-		}
 
 		try {
 			auth.delete_account(username);

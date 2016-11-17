@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebFilter("/*")
-public class ServletFilter implements Filter {
+@WebFilter(filterName = "AuthFilter", urlPatterns = {"/*"})
+public class AuthFilter implements Filter {
 
     private FilterConfig config;
 
@@ -31,27 +31,23 @@ public class ServletFilter implements Filter {
         boolean loggedIn = session != null && session.getAttribute("USER") != null;
         boolean loginRequest = request.getRequestURI().equals(loginURI);
 
+
         if(!setupDone) {
-            if(setupRequest) {
+            if(setupRequest)
                 filterChain.doFilter(request, response);
-                return;
-            }
-            else {
+            else
                 response.sendRedirect(setupURI);
-                return;
-            }
+            return;
         }
 
 
-        if (loggedIn || loginRequest) {
+        if (loggedIn || loginRequest)
             filterChain.doFilter(request, response);
-        } else {
+        else
             response.sendRedirect(loginURI);
-        }
     }
 
     @Override
     public void destroy() {
-
     }
 }

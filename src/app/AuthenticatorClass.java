@@ -1,5 +1,6 @@
 package app;
 
+import crypto.PasswordHashGenerator;
 import exceptions.*;
 import model.Account;
 import model.AccountClass;
@@ -32,7 +33,7 @@ public class AuthenticatorClass implements Authenticator {
         rsh = new BeanHandler<>(AccountClass.class);
     }
 
-    public boolean isSetupDone() throws SQLException, ClassNotFoundException {
+    public boolean isSetupDone() throws SQLException {
         return account_exists("root");
     }
 
@@ -41,9 +42,9 @@ public class AuthenticatorClass implements Authenticator {
         return acc != null;
     }
 
-    public void create_account(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException,
-            ExistingAccountException, EmptyFieldException, ClassNotFoundException {
-        if (name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
+    public void create_account(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException {
+
+        if (name == null || name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
             throw new EmptyFieldException();
 
         if (!pwd1.equals(pwd2))
@@ -53,7 +54,10 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        qr.insert(INSERTUSERSQL, rsh, name, pwd1, 0, 0, salt);
+        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, 0, 0, salt);
+
+        if (acc == null)
+            throw new ExistingAccountException();
     }
 
     public void delete_account(String name) throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException {
@@ -68,11 +72,11 @@ public class AuthenticatorClass implements Authenticator {
         qr.update(DELETEBYNAMESQL, name);
     }
 
-    public Account get_account(String name) throws SQLException, UndefinedAccountException, ClassNotFoundException {
+    public Account get_account(String name) throws SQLException {
         return (AccountClass) qr.query(SELECTBYNAMESQL, rsh, name);
     }
 
-    public void change_pwd(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, EmptyFieldException, ClassNotFoundException {
+    public void change_pwd(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, EmptyFieldException {
         if (name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
             throw new EmptyFieldException();
 
@@ -86,7 +90,7 @@ public class AuthenticatorClass implements Authenticator {
         qr.update(UPDATEPASSWORDSQL, pwd1, salt, name);
     }
 
-    public Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException, EmptyFieldException, AuthenticationErrorException, ClassNotFoundException {
+    public Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException, EmptyFieldException, AuthenticationErrorException {
         if (name == null || pwd == null)
             throw new AuthenticationErrorException();
 
@@ -113,17 +117,7 @@ public class AuthenticatorClass implements Authenticator {
         return acc;
     }
 
-    public void logout(Account acc) throws SQLException, ClassNotFoundException {
+    public void logout(Account acc) throws SQLException {
         qr.update(LOGOUTBYNAMESQL, acc.getUsername());
-    }
-
-    public Account login(HttpServletRequest req, HttpServletResponse resp) throws SQLException, UndefinedAccountException, LockedAccountException, AuthenticationErrorException, ClassNotFoundException {
-        HttpSession session = req.getSession(false);
-        Account acc = (Account) session.getAttribute("USER");
-
-        if (acc == null)
-            throw new AuthenticationErrorException();
-
-        return acc;
     }
 }
