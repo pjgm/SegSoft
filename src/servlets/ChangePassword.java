@@ -17,7 +17,7 @@ import exceptions.EmptyFieldException;
 import exceptions.PasswordMismatchException;
 import model.Account;
 import model.AccountClass;
-import validator.Validator;
+import validation.Validator;
 
 @WebServlet(name = "ChangePassword", urlPatterns = { "/ChangePassword" })
 public class ChangePassword extends HttpServlet {

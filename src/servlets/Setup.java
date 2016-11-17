@@ -4,7 +4,7 @@ import app.Authenticator;
 import exceptions.EmptyFieldException;
 import exceptions.ExistingAccountException;
 import exceptions.PasswordMismatchException;
-import validator.Validator;
+import validation.Validator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

@@ -17,7 +17,7 @@ import exceptions.EmptyFieldException;
 import exceptions.ExistingAccountException;
 import exceptions.PasswordMismatchException;
 import model.Account;
-import validator.Validator;
+import validation.Validator;
 
 @WebServlet(name = "CreateUser", urlPatterns = { "/CreateUser" })
 public class CreateUser extends HttpServlet {
