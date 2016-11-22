@@ -8,24 +8,31 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.ColumnListHandler;
+
 import java.sql.SQLException;
+import java.util.List;
 
 public class AuthenticatorClass implements Authenticator {
 
-    private static final String CREATETABLESQL = "create table if not exists account (username string primary key, password string, role string, loggedIn integer, locked integer, salt string)";
+    private static final String CREATEACCTABLESQL = "create table if not exists account (username string primary key, password string, role string, loggedIn integer, locked integer, salt string)";
+    private static final String CREATEFRIENDTABLESQL = "create table if not exists friend (username string, friendname string, primary key(username, friendname), foreign key(username) references account(username), foreign key (friendname) references account(username))";
     private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
     private static final String INSERTUSERSQL = "insert into account (username, password, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?)";
     private static final String DELETEBYNAMESQL = "delete from account where username LIKE ?";
     private static final String UPDATEPASSWORDSQL = "update account set password = ?, salt = ? where username LIKE ?";
     private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
     private static final String LOGOUTBYNAMESQL = "update account set loggedIn = 0 where username LIKE ?";
+    private static final String GETFRIENDSSQL = "select * from friend where username = ?";
+    private static final String ADDFRIENDSQL = "insert into friend (username, friendname) values (?, ?)";
 
     private QueryRunner qr;
     private ResultSetHandler rsh;
 
     public AuthenticatorClass(BasicDataSource dataSource) throws SQLException {
         this.qr = new QueryRunner(dataSource);
-        qr.update(CREATETABLESQL);
+        qr.update(CREATEACCTABLESQL);
+        qr.update(CREATEFRIENDTABLESQL);
         rsh = new BeanHandler<>(AccountClass.class);
     }
 
@@ -56,7 +63,7 @@ public class AuthenticatorClass implements Authenticator {
             throw new ExistingAccountException();
     }
 
-    public void delete_account(String name) throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException, ClassNotFoundException {
+    public void delete_account(String name) throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException {
         Account acc = get_account(name);
         if (acc == null)
             throw new UndefinedAccountException();
@@ -84,6 +91,16 @@ public class AuthenticatorClass implements Authenticator {
         String salt = phg.getSalt();
 
         qr.update(UPDATEPASSWORDSQL, pwd1, salt, name);
+    }
+
+    public void add_friend(String username, String friendName) throws SQLException {
+        //TODO: what resultsethandler to use?
+        qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), username, friendName);
+    }
+
+    //TODO: improve code
+    public List<String> get_friends(String name) throws SQLException {
+        return qr.query(GETFRIENDSSQL, new ColumnListHandler<String>("friendname"), name);
     }
 
     public Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException, EmptyFieldException, AuthenticationErrorException {

@@ -17,6 +17,7 @@ import exceptions.EmptyFieldException;
 import exceptions.ExistingAccountException;
 import exceptions.PasswordMismatchException;
 import model.Account;
+import model.Roles;
 import validation.Validator;
 
 @WebServlet(name = "CreateUser", urlPatterns = { "/CreateUser" })
@@ -74,7 +75,7 @@ public class CreateUser extends HttpServlet {
 
         try {
             LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
-            auth.create_account(username, password, password2, "USER");
+            auth.create_account(username, password, password2, Roles.USER.name());
             request.setAttribute("errorMessage", "User created successfully");
         } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());

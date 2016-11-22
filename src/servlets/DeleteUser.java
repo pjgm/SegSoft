@@ -58,7 +58,7 @@ public class DeleteUser extends HttpServlet {
 			auth.delete_account(username);
 			LOGGER.log(Level.FINE, "DELETED ACCOUNT " + username);
 			request.setAttribute("errorMessage", "User deleted successfully");
-		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException | ClassNotFoundException e) {
+		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
 			request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);

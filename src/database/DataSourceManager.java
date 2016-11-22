@@ -2,6 +2,8 @@ package database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.util.Properties;
+
 public class DataSourceManager {
 
     private static final String DRIVER = "org.sqlite.JDBC";
@@ -13,6 +15,7 @@ public class DataSourceManager {
         dataSource = new BasicDataSource();
         dataSource.setDriverClassName(DRIVER);
         dataSource.setUrl(URL);
+        dataSource.addConnectionProperty("foreign_keys", "true");
     }
 
     public BasicDataSource getDataSource() {

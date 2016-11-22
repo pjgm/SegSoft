@@ -4,6 +4,7 @@ import app.Authenticator;
 import exceptions.EmptyFieldException;
 import exceptions.ExistingAccountException;
 import exceptions.PasswordMismatchException;
+import model.Roles;
 import validation.Validator;
 
 import javax.servlet.ServletContext;
@@ -46,7 +47,7 @@ public class Setup extends HttpServlet {
         ServletContext sc = getServletContext();
 
         try {
-            auth.create_account("root", password, password, "ADMIN");
+            auth.create_account("root", password, password, Roles.ADMIN.name());
             LOGGER.log(Level.FINE, "ROOT SETUP SUCCESSFUL");
             sc.setAttribute("isSetupDone", auth.isSetupDone());
             request.setAttribute("errorMessage", "Admin created successfully");
