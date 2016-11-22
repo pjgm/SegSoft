@@ -22,4 +22,8 @@ public interface Account {
 
     void setSalt(String salt);
 
+    String getRole();
+
+    void setRole(String role);
+
 }

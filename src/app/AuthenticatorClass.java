@@ -8,17 +8,13 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
 public class AuthenticatorClass implements Authenticator {
 
-    private static final String CREATETABLESQL = "create table if not exists account (username string primary key, password string, loggedIn integer, locked integer, salt string)";
+    private static final String CREATETABLESQL = "create table if not exists account (username string primary key, password string, role string, loggedIn integer, locked integer, salt string)";
     private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
-    private static final String INSERTUSERSQL = "insert into account (username, password, loggedIn, locked, salt) values (?, ?, ?, ?, ?)";
+    private static final String INSERTUSERSQL = "insert into account (username, password, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?)";
     private static final String DELETEBYNAMESQL = "delete from account where username LIKE ?";
     private static final String UPDATEPASSWORDSQL = "update account set password = ?, salt = ? where username LIKE ?";
     private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
@@ -42,9 +38,9 @@ public class AuthenticatorClass implements Authenticator {
         return acc != null;
     }
 
-    public void create_account(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException {
+    public void create_account(String name, String pwd1, String pwd2, String role) throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException {
 
-        if (name == null || name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty())
+        if (name == null || name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty() || role.isEmpty())
             throw new EmptyFieldException();
 
         if (!pwd1.equals(pwd2))
@@ -54,7 +50,7 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, 0, 0, salt);
+        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, role, 0, 0, salt);
 
         if (acc == null)
             throw new ExistingAccountException();

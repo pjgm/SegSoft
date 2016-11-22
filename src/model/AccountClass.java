@@ -4,6 +4,7 @@ public class AccountClass implements Account {
 
     private String username;
     private String password;
+    private String role;
     private int loggedIn;
     private int locked;
     private String salt;
@@ -26,6 +27,14 @@ public class AccountClass implements Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public int getLoggedIn() {

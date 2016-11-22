@@ -74,7 +74,7 @@ public class CreateUser extends HttpServlet {
 
         try {
             LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
-            auth.create_account(username, password, password2);
+            auth.create_account(username, password, password2, "USER");
             request.setAttribute("errorMessage", "User created successfully");
         } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());

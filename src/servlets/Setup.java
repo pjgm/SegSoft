@@ -46,7 +46,7 @@ public class Setup extends HttpServlet {
         ServletContext sc = getServletContext();
 
         try {
-            auth.create_account("root", password, password);
+            auth.create_account("root", password, password, "ADMIN");
             LOGGER.log(Level.FINE, "ROOT SETUP SUCCESSFUL");
             sc.setAttribute("isSetupDone", auth.isSetupDone());
             request.setAttribute("errorMessage", "Admin created successfully");
