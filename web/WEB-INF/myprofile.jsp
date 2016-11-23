@@ -1,10 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>FriendList</title>
+    <title>${username} Profile</title>
     <style>
         table {
             font-family: arial, sans-serif;
@@ -24,6 +21,7 @@
     </style>
 </head>
 <body>
+
 <a href="/">home</a>
 <a href="/MyProfile">my_profile</a>
 <a href="/Friends">friends</a>
@@ -31,17 +29,8 @@
 <a href="/DeleteUser">delete_user</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
-<h1>Add new Friend</h1>
 
-<form name="FriendsForm" method="post" action="Friends">
-    <div style="color: #FF0000;">${errorMessage}</div>
-    Username: <input type="text" name="username"/> <br/>
-    <input type="submit" value="Submit"/>
+${info}
 
-<h1>FriendList</h1>
-
-${friendlist}
-
-</form>
 </body>
 </html>

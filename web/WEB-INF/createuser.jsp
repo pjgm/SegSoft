@@ -8,6 +8,7 @@
 </head>
 <body>
 <a href="/">home</a>
+<a href="/MyProfile">my_profile</a>
 <a href="/Friends">friends</a>
 <a href="/CreateUser">create_user</a>
 <a href="/DeleteUser">delete_user</a>
