@@ -10,7 +10,7 @@ public interface Authenticator {
 
 	boolean isSetupDone() throws SQLException;
 
-	void create_account(String name, String pwd1, String pwd2, String role)
+	void create_account(String name, String pwd1, String pwd2, String email, String phone, String role)
 			throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException;
 
 	void delete_account(String name)

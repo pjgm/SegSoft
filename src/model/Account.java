@@ -10,6 +10,14 @@ public interface Account {
 
     void setPassword(String password);
 
+    String getEmail();
+
+    void setEmail(String email);
+
+    String getPhone();
+
+    void setPhone(String phone);
+
     int getLoggedIn();
 
     void setLoggedIn(int loggedIn);

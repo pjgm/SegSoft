@@ -34,11 +34,17 @@ public class Friends extends HttpServlet {
             HttpSession session = request.getSession(false);
             Account acc = (AccountClass) session.getAttribute("USER");
             String username = acc.getUsername();
-            String friendList = "<table>";
+            String friendList = "<table><tr><th>Name</th><th>Email</th><th>Phone</th></tr>";
             List<String> flist = auth.get_friends(username);
 
-            for (String friend : flist)
-                friendList += "<tr><td>" + friend + "</td></tr>";
+            for (String friend : flist) {
+                Account account = auth.get_account(friend);
+                friendList += "<tr>";
+                friendList += "<td>" + friend + "</td>";
+                friendList += "<td>" + account.getEmail() + "</td>";
+                friendList += "<td>" + account.getPhone() + "</td>";
+                friendList += "</tr>";
+            }
 
             friendList += "</table>";
             request.setAttribute("friendlist", friendList);

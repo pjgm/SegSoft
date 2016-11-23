@@ -15,12 +15,15 @@ import java.util.List;
 
 public class AuthenticatorClass implements Authenticator {
 
-    private static final String CREATEACCTABLESQL = "create table if not exists account (username string primary key, password string, role string, loggedIn integer, locked integer, salt string)";
+    private static final String CREATEACCTABLESQL = "create table if not exists account (username string primary key," +
+            " password string, email string, phone string, bio string, secretinfo string, role string, loggedIn " +
+            "integer, locked integer, salt string)";
     private static final String CREATEFRIENDTABLESQL = "create table if not exists friend (username string, " +
             "friendname string, primary key(username, friendname), foreign key(username) references account(username)" +
             ", foreign key (friendname) references account(username), check (username != friendname))";
     private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
-    private static final String INSERTUSERSQL = "insert into account (username, password, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?)";
+    private static final String INSERTUSERSQL = "insert into account (username, password, email, phone, bio, " +
+            "secretinfo, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String DELETEBYNAMESQL = "delete from account where username LIKE ?";
     private static final String UPDATEPASSWORDSQL = "update account set password = ?, salt = ? where username LIKE ?";
     private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
@@ -47,9 +50,11 @@ public class AuthenticatorClass implements Authenticator {
         return acc != null;
     }
 
-    public void create_account(String name, String pwd1, String pwd2, String role) throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException {
+    public void create_account(String name, String pwd1, String pwd2, String email, String phone, String role) throws
+            SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException {
 
-        if (name == null || name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty() || role.isEmpty())
+        if (name == null || name.isEmpty() || pwd1.isEmpty() || pwd2.isEmpty() || role.isEmpty() || email.isEmpty()
+                || phone.isEmpty())
             throw new EmptyFieldException();
 
         if (!pwd1.equals(pwd2))
@@ -59,7 +64,7 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, role, 0, 0, salt);
+        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, email, phone, "", "", role, 0, 0, salt);
 
         if (acc == null)
             throw new ExistingAccountException();

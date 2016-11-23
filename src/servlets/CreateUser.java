@@ -60,7 +60,10 @@ public class CreateUser extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String password2 = request.getParameter("password2");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
 
+        //TODO: Fix duplicate code
         if (!val.validateUsername(username)) {
             request.setAttribute("errorMessage", "Username has invalid format");
             request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
@@ -73,9 +76,21 @@ public class CreateUser extends HttpServlet {
             return;
         }
 
+        if (!val.validateEmail(email)) {
+            request.setAttribute("errorMessage", "Email has invalid format");
+            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            return;
+        }
+
+        if (!val.validatePhone(phone)) {
+            request.setAttribute("errorMessage", "Phone has invalid format");
+            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            return;
+        }
+
         try {
             LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
-            auth.create_account(username, password, password2, Roles.USER.name());
+            auth.create_account(username, password, password2, email, phone, Roles.USER.name());
             request.setAttribute("errorMessage", "User created successfully");
         } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());
