@@ -1,6 +1,7 @@
 package servlets;
 
 import app.Authenticator;
+import exceptions.UndefinedAccountException;
 import model.Account;
 import model.AccountClass;
 
@@ -40,7 +41,7 @@ public class Friends extends HttpServlet {
             for (String friend : flist) {
                 Account account = auth.get_account(friend);
                 friendList += "<tr>";
-                friendList += "<td>" + friend + "</td>";
+                friendList += "<td>" + "<a href=\"/User/" + friend + "\">" + friend + "</a>" + "</td>";
                 friendList += "<td>" + account.getEmail() + "</td>";
                 friendList += "<td>" + account.getPhone() + "</td>";
                 friendList += "</tr>";
@@ -49,7 +50,7 @@ public class Friends extends HttpServlet {
             friendList += "</table>";
             request.setAttribute("friendlist", friendList);
 
-        } catch (SQLException | NullPointerException e) {
+        } catch (SQLException | NullPointerException | UndefinedAccountException e) {
             e.printStackTrace();
         } finally {
             request.getRequestDispatcher("/WEB-INF/friends.jsp").forward(request, response);

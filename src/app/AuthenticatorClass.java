@@ -64,7 +64,8 @@ public class AuthenticatorClass implements Authenticator {
         pwd1 = phg.getHash();
         String salt = phg.getSalt();
 
-        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, email, phone, "", "", role, 0, 0, salt);
+        Account acc = (AccountClass) qr.insert(INSERTUSERSQL, rsh, name, pwd1, email, phone, "Hello my name is " + name
+                + " and this is my bio", "My private information goes here", role, 0, 0, salt);
 
         if (acc == null)
             throw new ExistingAccountException();
@@ -82,8 +83,11 @@ public class AuthenticatorClass implements Authenticator {
         qr.update(DELETEBYNAMESQL, name);
     }
 
-    public Account get_account(String name) throws SQLException {
-        return (AccountClass) qr.query(SELECTBYNAMESQL, rsh, name);
+    public Account get_account(String name) throws SQLException, UndefinedAccountException {
+        Account acc = (AccountClass) qr.query(SELECTBYNAMESQL, rsh, name);
+        if (acc == null)
+            throw new UndefinedAccountException();
+        return acc;
     }
 
     public void change_pwd(String name, String pwd1, String pwd2) throws SQLException, PasswordMismatchException, EmptyFieldException {

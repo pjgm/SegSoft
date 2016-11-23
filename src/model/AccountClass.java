@@ -2,14 +2,8 @@ package model;
 
 public class AccountClass implements Account {
 
-    private String username;
-    private String password;
-    private String email;
-    private String phone;
-    private String role;
-    private int loggedIn;
-    private int locked;
-    private String salt;
+    private String username, password, email, phone, role, bio, secretInfo, salt;
+    private int loggedIn, locked;
 
     public AccountClass() {
 
@@ -53,6 +47,22 @@ public class AccountClass implements Account {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getSecretInfo() {
+        return secretInfo;
+    }
+
+    public void setSecretInfo(String secretInfo) {
+        this.secretInfo = secretInfo;
     }
 
     public int getLoggedIn() {

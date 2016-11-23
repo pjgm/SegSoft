@@ -16,7 +16,7 @@ public interface Authenticator {
 	void delete_account(String name)
 			throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException;
 
-	Account get_account(String name) throws SQLException;
+	Account get_account(String name) throws SQLException, UndefinedAccountException;
 
 	void change_pwd(String name, String pwd1, String pwd2)
 			throws SQLException, PasswordMismatchException, EmptyFieldException;

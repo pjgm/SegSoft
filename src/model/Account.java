@@ -34,4 +34,12 @@ public interface Account {
 
     void setRole(String role);
 
+    String getBio();
+
+    void setBio(String bio);
+
+    String getSecretInfo();
+
+    void setSecretInfo(String secretInfo);
+
 }
