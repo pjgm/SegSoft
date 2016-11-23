@@ -16,7 +16,9 @@ import java.util.List;
 public class AuthenticatorClass implements Authenticator {
 
     private static final String CREATEACCTABLESQL = "create table if not exists account (username string primary key, password string, role string, loggedIn integer, locked integer, salt string)";
-    private static final String CREATEFRIENDTABLESQL = "create table if not exists friend (username string, friendname string, primary key(username, friendname), foreign key(username) references account(username), foreign key (friendname) references account(username))";
+    private static final String CREATEFRIENDTABLESQL = "create table if not exists friend (username string, " +
+            "friendname string, primary key(username, friendname), foreign key(username) references account(username)" +
+            ", foreign key (friendname) references account(username), check (username != friendname))";
     private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
     private static final String INSERTUSERSQL = "insert into account (username, password, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?)";
     private static final String DELETEBYNAMESQL = "delete from account where username LIKE ?";
