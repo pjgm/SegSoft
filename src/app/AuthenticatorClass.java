@@ -107,6 +107,7 @@ public class AuthenticatorClass implements Authenticator {
     public void add_friend(String username, String friendName) throws SQLException {
         //TODO: what resultsethandler to use?
         qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), username, friendName);
+        qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), friendName, username);
     }
 
     //TODO: improve code

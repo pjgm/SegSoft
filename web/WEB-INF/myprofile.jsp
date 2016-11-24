@@ -32,5 +32,11 @@
 
 ${info}
 
+Change phone: <input type="text" name="phone"/> <br/>
+Change email: <input type="text" name="email"/> <br/>
+Change bio: <input type="text" name="bio"/> <br/>
+Change private info: <input type="text" name="secretInfo"/> <br/>
+<input type="submit" value="Submit"/>
+
 </body>
 </html>
