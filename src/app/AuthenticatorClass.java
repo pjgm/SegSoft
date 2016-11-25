@@ -11,6 +11,7 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 
 import java.sql.SQLException;
+import java.util.EmptyStackException;
 import java.util.List;
 
 public class AuthenticatorClass implements Authenticator {
@@ -30,6 +31,7 @@ public class AuthenticatorClass implements Authenticator {
     private static final String LOGOUTBYNAMESQL = "update account set loggedIn = 0 where username LIKE ?";
     private static final String GETFRIENDSSQL = "select * from friend where username = ?";
     private static final String ADDFRIENDSQL = "insert into friend (username, friendname) values (?, ?)";
+    private static final String SETLOCKSTATUSSQL = "update account set locked = ? where username LIKE ?";
 
     private QueryRunner qr;
     private ResultSetHandler rsh;
@@ -102,6 +104,27 @@ public class AuthenticatorClass implements Authenticator {
         String salt = phg.getSalt();
 
         qr.update(UPDATEPASSWORDSQL, pwd1, salt, name);
+    }
+
+    public void lock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException {
+        if (name.isEmpty())
+            throw new EmptyFieldException();
+
+        int updates = qr.update(SETLOCKSTATUSSQL, 1, name);
+
+        if (updates == 0)
+            throw new UndefinedAccountException();
+
+    }
+
+    public void unlock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException {
+        if (name.isEmpty())
+            throw new EmptyFieldException();
+
+        int updates = qr.update(SETLOCKSTATUSSQL, 0, name);
+
+        if (updates == 0)
+            throw new UndefinedAccountException();
     }
 
     public void add_friend(String username, String friendName) throws SQLException {

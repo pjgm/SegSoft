@@ -21,6 +21,10 @@ public interface Authenticator {
 	void change_pwd(String name, String pwd1, String pwd2)
 			throws SQLException, PasswordMismatchException, EmptyFieldException;
 
+	void lock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException;
+
+	void unlock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException;
+
 	void add_friend(String username, String friendName) throws SQLException;
 
 	List<String> get_friends(String name) throws SQLException;
