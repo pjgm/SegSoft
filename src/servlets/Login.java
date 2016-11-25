@@ -1,5 +1,6 @@
 package servlets;
 
+import access_control.AccessController;
 import app.Authenticator;
 import exceptions.AuthenticationErrorException;
 import exceptions.EmptyFieldException;
@@ -26,10 +27,12 @@ public class Login extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(Login.class.getName());
 
     private Authenticator auth;
+    private AccessController ac;
 
     @Override
     public void init() {
         this.auth = (Authenticator) getServletContext().getAttribute("authenticator");
+        this.ac = (AccessController) getServletContext().getAttribute("accesscontroller");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,6 +48,7 @@ public class Login extends HttpServlet {
             LOGGER.log(Level.FINE, "LOGIN " + authUser.getUsername());
             HttpSession session = request.getSession(true);
             session.setAttribute("USER", authUser);
+            session.setAttribute("AC", ac.getCapabilities(username));
             session.setMaxInactiveInterval(SESSIONTIMEOUT);
             request.getRequestDispatcher("/WEB-INF/home.jsp").forward(request, response);
         } catch (SQLException | UndefinedAccountException | LockedAccountException | EmptyFieldException |

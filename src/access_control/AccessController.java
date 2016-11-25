@@ -5,9 +5,11 @@ import java.util.List;
 
 public interface AccessController {
 
-    Capability createCapability(String owner, String grantee, String resource, String operation) throws SQLException;
+    void createCapability(String owner, String grantee, String resource, String operation) throws SQLException;
 
-    boolean checkPermission(String user, Capability cap, String resource, String operation);
+    Capability getCapability(String owner, String grantee, String resource, String operation) throws SQLException;
 
-    List<Capability> getCapabilities(String user);
+    boolean checkPermission(Capability capability) throws SQLException;
+
+    List<CapabilityClass> getCapabilities(String user) throws SQLException;
 }
