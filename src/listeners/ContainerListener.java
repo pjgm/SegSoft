@@ -1,5 +1,7 @@
 package listeners;
 
+import access_control.AccessController;
+import access_control.AccessControllerClass;
 import app.AuthenticatorClass;
 import app.Authenticator;
 import database.DataSourceManager;
@@ -20,10 +22,13 @@ public class ContainerListener implements ServletContextListener {
 
         ServletContext sc = servletContextEvent.getServletContext();
         Authenticator auth;
+        AccessController ac;
 
         try {
             auth = new AuthenticatorClass(cm.getDataSource());
+            ac = new AccessControllerClass(cm.getDataSource());
             sc.setAttribute("authenticator", auth);
+            sc.setAttribute("accesscontroller", ac);
             sc.setAttribute("isSetupDone", auth.isSetupDone());
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());

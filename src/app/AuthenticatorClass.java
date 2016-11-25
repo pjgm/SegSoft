@@ -11,7 +11,6 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ColumnListHandler;
 
 import java.sql.SQLException;
-import java.util.EmptyStackException;
 import java.util.List;
 
 public class AuthenticatorClass implements Authenticator {
@@ -33,6 +32,12 @@ public class AuthenticatorClass implements Authenticator {
     private static final String ADDFRIENDSQL = "insert into friend (username, friendname) values (?, ?)";
     private static final String SETLOCKSTATUSSQL = "update account set locked = ? where username LIKE ?";
 
+    //capabilities
+    private static final String CREATECAPTABLESQL = "create table if not exists capability (grantee string, owner " +
+            "string, resource string, operation string, creationTime timestamp default current_timestamp not null, " +
+            "foreign key (grantee) references account(username), foreign key (owner) references account (username) " +
+            "primary key (grantee, owner, resource, operation), check (grantee != owner))";
+
     private QueryRunner qr;
     private ResultSetHandler rsh;
 
@@ -40,6 +45,7 @@ public class AuthenticatorClass implements Authenticator {
         this.qr = new QueryRunner(dataSource);
         qr.update(CREATEACCTABLESQL);
         qr.update(CREATEFRIENDTABLESQL);
+        qr.update(CREATECAPTABLESQL);
         rsh = new BeanHandler<>(AccountClass.class);
     }
 
