@@ -40,6 +40,9 @@ public class Friends extends HttpServlet {
 
             for (String friend : flist) {
                 Account account = auth.get_account(friend);
+                if (account.getLocked() == 1)
+                    continue;
+
                 friendList += "<tr>";
                 friendList += "<td>" + "<a href=\"/User/" + friend + "\">" + friend + "</a>" + "</td>";
                 friendList += "<td>" + account.getEmail() + "</td>";

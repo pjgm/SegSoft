@@ -35,6 +35,10 @@ public class User extends HttpServlet {
 
         try {
             Account acc = auth.get_account(username);
+            if(acc.getLocked() == 1) {
+                response.sendRedirect("/Friends");
+                return;
+            }
             String userInfo = acc.getUsername() + "<br/>" + acc.getEmail() + "<br/>" + acc.getPhone() + "<br/>"
                     + acc.getBio() + "<br/>" + acc.getSecretInfo();
             request.setAttribute("msg", userInfo);
