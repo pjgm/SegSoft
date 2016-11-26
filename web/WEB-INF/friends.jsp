@@ -38,7 +38,7 @@
     Username: <input type="text" name="username"/> <br/>
     <input type="submit" value="Submit"/>
 
-<h1>FriendList</h1>
+<h1>Friend List</h1>
 
 ${friendlist}
 

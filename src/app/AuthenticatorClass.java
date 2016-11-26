@@ -26,6 +26,10 @@ public class AuthenticatorClass implements Authenticator {
             "secretinfo, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String DELETEBYNAMESQL = "delete from account where username LIKE ?";
     private static final String UPDATEPASSWORDSQL = "update account set password = ?, salt = ? where username LIKE ?";
+    private static final String UPDATEPHONESQL = "update account set phone = ? where username = ?";
+    private static final String UPDATEEMAILSQL = "update account set email = ? where username = ?";
+    private static final String UPDATEBIOSQL = "update account set bio = ? where username = ?";
+    private static final String UPDATESECRETSQL = "update account set secretinfo = ? where username = ?";
     private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
     private static final String LOGOUTBYNAMESQL = "update account set loggedIn = 0 where username LIKE ?";
     private static final String GETFRIENDSSQL = "select * from friend where username = ?";
@@ -142,6 +146,30 @@ public class AuthenticatorClass implements Authenticator {
     //TODO: improve code
     public List<String> get_friends(String name) throws SQLException {
         return qr.query(GETFRIENDSSQL, new ColumnListHandler<String>("friendname"), name);
+    }
+
+    public void change_email(String username, String email) throws SQLException, EmptyFieldException {
+        if (email.isEmpty())
+            throw new EmptyFieldException();
+        qr.update(UPDATEEMAILSQL, email, username);
+    }
+
+    public void change_phone(String username, String phone) throws SQLException, EmptyFieldException {
+        if (phone.isEmpty())
+            throw new EmptyFieldException();
+        qr.update(UPDATEPHONESQL, phone, username);
+    }
+
+    public void change_bio(String username, String bio) throws SQLException, EmptyFieldException {
+        if (bio.isEmpty())
+            throw new EmptyFieldException();
+        qr.update(UPDATEBIOSQL, bio, username);
+    }
+
+    public void change_secretInfo(String username, String secretInfo) throws SQLException, EmptyFieldException {
+        if (secretInfo.isEmpty())
+            throw new EmptyFieldException();
+        qr.update(UPDATESECRETSQL, secretInfo, username);
     }
 
     public Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException, EmptyFieldException, AuthenticationErrorException {

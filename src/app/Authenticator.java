@@ -29,6 +29,14 @@ public interface Authenticator {
 
 	List<String> get_friends(String name) throws SQLException;
 
+	void change_email(String username, String email) throws SQLException, EmptyFieldException;
+
+	void change_phone(String username, String phone) throws SQLException, EmptyFieldException;
+
+	void change_bio(String username, String bio) throws SQLException, EmptyFieldException;
+
+	void change_secretInfo(String username, String secretInfo) throws SQLException, EmptyFieldException;
+
 	Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException,
 			EmptyFieldException, AuthenticationErrorException;
 

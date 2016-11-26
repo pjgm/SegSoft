@@ -31,12 +31,14 @@
 <a href="/Logout">logout</a>
 
 ${info}
-
-Change phone: <input type="text" name="phone"/> <br/>
-Change email: <input type="text" name="email"/> <br/>
-Change bio: <input type="text" name="bio"/> <br/>
-Change private info: <input type="text" name="secretInfo"/> <br/>
-<input type="submit" value="Submit"/>
+<div style="color: #FF0000;">${errorMessage}</div>
+<form name="MyProfileForm" method="post" action="/MyProfile">
+    Change phone: <input type="text" name="phone"/> <input type="submit" name="submitButton" value="phone"/> <br/>
+    Change email: <input type="text" name="email"/> <input type="submit" name="submitButton" value="email"/> <br/>
+    Change bio: <input type="text" name="bio"/> <input type="submit" name="submitButton" value="bio"/> <br/>
+    Change private info: <input type="text" name="secretInfo"/> <input type="submit" name="submitButton" value="private"/>
+<br/>
+</form>
 
 </body>
 </html>
