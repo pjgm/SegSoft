@@ -52,14 +52,12 @@ public class AuthFilter implements Filter {
         String requestURI = request.getRequestURI();
         String setupURI = "/Setup";
         String loginURI = "/Login";
-        String rootURI = "/";
 
         boolean setupDone = (boolean) config.getServletContext().getAttribute("isSetupDone");
         boolean setupRequest = request.getRequestURI().equals(setupURI);
 
         boolean loggedIn = session != null && session.getAttribute("USER") != null;
         boolean loginRequest = requestURI.equals(loginURI);
-        boolean rootRequest = requestURI.equals(rootURI);
 
         boolean hasPermission = false;
 
@@ -90,14 +88,14 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (!rootRequest && !loginRequest && !hasPermission){
+        if (loggedIn && !hasPermission){
             response.getOutputStream().print("Error: You have no permission to access this page");
             return;
         }
 
-        if (loggedIn || loginRequest)
+        if (loggedIn || loginRequest) {
             filterChain.doFilter(request, response);
-        else
+        } else
             response.sendRedirect(loginURI);
     }
 
