@@ -54,7 +54,7 @@ public class Login extends HttpServlet {
         } catch (SQLException | UndefinedAccountException | LockedAccountException | EmptyFieldException |
                 AuthenticationErrorException e) {
             request.setAttribute("errorMessage", e.getMessage());
-            request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            response.sendRedirect("/Home");
         }
     }
 }
