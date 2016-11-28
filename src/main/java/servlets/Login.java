@@ -1,12 +1,12 @@
-package servlets;
+package main.java.servlets;
 
-import access_control.AccessController;
-import app.Authenticator;
-import exceptions.AuthenticationErrorException;
-import exceptions.EmptyFieldException;
-import exceptions.LockedAccountException;
-import exceptions.UndefinedAccountException;
-import model.Account;
+import main.java.access_control.AccessController;
+import main.java.app.Authenticator;
+import main.java.exceptions.AuthenticationErrorException;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.LockedAccountException;
+import main.java.exceptions.UndefinedAccountException;
+import main.java.model.Account;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

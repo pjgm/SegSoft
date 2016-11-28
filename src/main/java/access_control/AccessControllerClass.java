@@ -1,4 +1,4 @@
-package access_control;
+package main.java.access_control;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
@@ -30,8 +30,7 @@ public class AccessControllerClass implements AccessController {
     }
 
     public Capability getCapability(String owner, String grantee, String resource, String operation) throws SQLException {
-        Capability cap = (CapabilityClass) qr.query(SELECTCAPSQL, rsh, owner, grantee, resource, operation);
-        return cap;
+        return (CapabilityClass) qr.query(SELECTCAPSQL, rsh, owner, grantee, resource, operation);
     }
 
 

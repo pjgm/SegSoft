@@ -1,22 +1,16 @@
-package servlets;
+package main.java.servlets;
 
-import access_control.AccessController;
-import access_control.Capability;
-import access_control.CapabilityClass;
-import app.Authenticator;
-import exceptions.EmptyFieldException;
-import exceptions.UndefinedAccountException;
-import model.Account;
+import main.java.app.Authenticator;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.UndefinedAccountException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Logger;
 
 @WebServlet(name = "Admin", urlPatterns = {"/Admin"})
@@ -45,7 +39,7 @@ public class Admin extends HttpServlet {
                 request.setAttribute("errorMessage", "User unlocked successfully");
             }
         }
-        catch (EmptyFieldException | SQLException |UndefinedAccountException e) {
+        catch (EmptyFieldException | SQLException | UndefinedAccountException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
         request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);

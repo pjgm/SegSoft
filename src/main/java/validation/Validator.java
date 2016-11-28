@@ -1,4 +1,4 @@
-package validation;
+package main.java.validation;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import java.util.regex.Pattern;

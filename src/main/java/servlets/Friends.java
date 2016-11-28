@@ -1,9 +1,9 @@
-package servlets;
+package main.java.servlets;
 
-import app.Authenticator;
-import exceptions.UndefinedAccountException;
-import model.Account;
-import model.AccountClass;
+import main.java.app.Authenticator;
+import main.java.exceptions.UndefinedAccountException;
+import main.java.model.Account;
+import main.java.model.AccountClass;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.ws.Dispatch;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;

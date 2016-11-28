@@ -1,4 +1,4 @@
-package crypto;
+package main.java.crypto;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;

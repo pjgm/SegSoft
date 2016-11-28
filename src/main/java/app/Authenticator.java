@@ -1,7 +1,7 @@
-package app;
+package main.java.app;
 
-import exceptions.*;
-import model.Account;
+import main.java.exceptions.*;
+import main.java.model.Account;
 
 import java.sql.SQLException;
 import java.util.List;

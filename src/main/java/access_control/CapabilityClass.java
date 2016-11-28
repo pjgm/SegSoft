@@ -1,4 +1,4 @@
-package access_control;
+package main.java.access_control;
 
 public class CapabilityClass implements Capability {
 

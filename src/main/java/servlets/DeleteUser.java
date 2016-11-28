@@ -1,4 +1,10 @@
-package servlets;
+package main.java.servlets;
+
+import main.java.app.Authenticator;
+import main.java.exceptions.AccountConnectionException;
+import main.java.exceptions.LockedAccountException;
+import main.java.exceptions.UndefinedAccountException;
+import main.java.model.Account;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -12,12 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import app.Authenticator;
-import exceptions.AccountConnectionException;
-import exceptions.LockedAccountException;
-import exceptions.UndefinedAccountException;
-import model.Account;
-
 @WebServlet(name = "DeleteUser", urlPatterns = { "/DeleteUser" })
 public class DeleteUser extends HttpServlet {
 
@@ -28,29 +28,14 @@ public class DeleteUser extends HttpServlet {
 		this.auth = (Authenticator) getServletContext().getAttribute("authenticator");
 	}
 
-	private boolean isRoot(HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
-		Account acc = (Account) session.getAttribute("USER");
-		return acc.getUsername().equals("root");
-	}
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		if (!isRoot(request)) {
-			response.getOutputStream().print("Error: You have no permission to access this page");
-			return;
-		}
 		request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		if (!isRoot(request)) {
-			response.getOutputStream().print("Error: You have no permission to access this page");
-			return;
-		}
 
 		String username = request.getParameter("username");
 

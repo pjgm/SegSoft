@@ -1,9 +1,9 @@
-package app;
+package main.java.app;
 
-import crypto.PasswordHashGenerator;
-import exceptions.*;
-import model.Account;
-import model.AccountClass;
+import main.java.crypto.PasswordHashGenerator;
+import main.java.exceptions.*;
+import main.java.model.Account;
+import main.java.model.AccountClass;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;

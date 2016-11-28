@@ -1,11 +1,11 @@
-package servlets;
+package main.java.servlets;
 
-import app.Authenticator;
-import exceptions.EmptyFieldException;
-import exceptions.UndefinedAccountException;
-import model.Account;
-import model.AccountClass;
-import validation.Validator;
+import main.java.app.Authenticator;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.UndefinedAccountException;
+import main.java.model.Account;
+import main.java.model.AccountClass;
+import main.java.validation.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Logger;
 
 @WebServlet(name = "MyProfile", urlPatterns = { "/MyProfile" })
