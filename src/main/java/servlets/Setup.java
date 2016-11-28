@@ -55,6 +55,7 @@ public class Setup extends HttpServlet {
             auth.create_account("system", password, password, "system@system.com" , "00000", "system");
             auth.create_account("root", password, password, "admin@admin.com", "911111111", Roles.ADMIN.name());
             ac.createCapability("system", "root", "Admin", "RWX");
+            ac.createCapability("system", "root", "Home", "RWX");
             ac.createCapability("system", "root", "CreateUser", "RWX");
             ac.createCapability("system", "root", "DeleteUser", "RWX");
             ac.createCapability("system", "root", "MyProfile", "RWX");

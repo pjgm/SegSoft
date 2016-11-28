@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.ws.Dispatch;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,23 +37,19 @@ public class Friends extends HttpServlet {
             HttpSession session = request.getSession(false);
             Account acc = (AccountClass) session.getAttribute("USER");
             String username = acc.getUsername();
-            String friendList = "<table><tr><th>Name</th><th>Email</th><th>Phone</th></tr>";
-            List<String> flist = auth.get_friends(username);
+            List<String> friendsNames = auth.get_friends(username);
+            List<Account> friendsList = new ArrayList<Account>();
 
-            for (String friend : flist) {
+            int i = 0;
+            for (String friend : friendsNames) {
                 Account account = auth.get_account(friend);
-                if (account.getLocked() == 1)
-                    continue;
-
-                friendList += "<tr>";
-                friendList += "<td>" + "<a href=\"/User/" + friend + "\">" + friend + "</a>" + "</td>";
-                friendList += "<td>" + account.getEmail() + "</td>";
-                friendList += "<td>" + account.getPhone() + "</td>";
-                friendList += "</tr>";
+                if (account.getLocked() != 1)
+                    friendsList.add(acc);
+                    System.out.println(friendsList.get(i).getUsername());
+                    i++;
             }
 
-            friendList += "</table>";
-            request.setAttribute("friendlist", friendList);
+            request.setAttribute("friendlist", friendsList);
 
         } catch (SQLException | NullPointerException | UndefinedAccountException e) {
             e.printStackTrace();

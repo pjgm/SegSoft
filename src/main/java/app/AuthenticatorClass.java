@@ -19,8 +19,8 @@ public class AuthenticatorClass implements Authenticator {
             " password string, email string, phone string, bio string, secretinfo string, role string, loggedIn " +
             "integer, locked integer, salt string)";
     private static final String CREATEFRIENDTABLESQL = "create table if not exists friend (username string, " +
-            "friendname string, status string, primary key(username, friendname), foreign key(username) references " +
-            "account(username), foreign key (friendname) references account(username), check (username != friendname))";
+            "friendname string, primary key(username, friendname), foreign key(username) references account(username)" +
+            ", foreign key (friendname) references account(username), check (username != friendname))";
     private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
     private static final String INSERTUSERSQL = "insert into account (username, password, email, phone, bio, " +
             "secretinfo, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -33,7 +33,7 @@ public class AuthenticatorClass implements Authenticator {
     private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
     private static final String LOGOUTBYNAMESQL = "update account set loggedIn = 0 where username LIKE ?";
     private static final String GETFRIENDSSQL = "select * from friend where username = ?";
-    private static final String ADDFRIENDSQL = "insert into friend (username, friendname, status) values (?, ?, ?)";
+    private static final String ADDFRIENDSQL = "insert into friend (username, friendname) values (?, ?)";
     private static final String SETLOCKSTATUSSQL = "update account set locked = ? where username LIKE ?";
 
     //capabilities
@@ -138,8 +138,9 @@ public class AuthenticatorClass implements Authenticator {
     }
 
     public void add_friend(String username, String friendName) throws SQLException {
-        qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), username, friendName, 0);
-        qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), friendName, username, 0);
+        //TODO: what resultsethandler to use?
+        qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), username, friendName);
+        qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), friendName, username);
     }
 
     //TODO: improve code
