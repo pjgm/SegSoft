@@ -3,7 +3,7 @@
 ## Installation Instructions
 
 This project uses [Maven][1] so you can use your IDE of choice and import this repo directly as a maven project or
-clone it and running if you have maven installed.
+clone it and run if you have maven installed.
 
 ## Running Instructions
 
