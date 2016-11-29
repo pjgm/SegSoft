@@ -34,7 +34,9 @@ public class AuthenticatorClass implements Authenticator {
     private static final String LOGINBYNAMESQL = "update account set loggedIn = 1 where username LIKE ?";
     private static final String LOGOUTBYNAMESQL = "update account set loggedIn = 0 where username LIKE ?";
     private static final String GETFRIENDSSQL = "select * from friend where username = ? and status = 1";
-    private static final String GETPENDINGFRIENDSSQL = "select * from friend where username = ?";
+    private static final String REMOVEFRIENDSQL = "delete from friend where username = ? and friendname = ?";
+    private static final String GETPENDINGFRIENDSSQL = "select * from friend where friendname = ? and status = 0";
+    private static final String ACCEPTFRIENDSQL = "update friend set status = 1 where username = ? and friendname = ?";
     private static final String ADDFRIENDSQL = "insert into friend (username, friendname, status) values (?, ?, ?)";
     private static final String SETLOCKSTATUSSQL = "update account set locked = ? where username LIKE ?";
 
@@ -144,9 +146,21 @@ public class AuthenticatorClass implements Authenticator {
         qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), username, friendName, status);
     }
 
+    public void remove_friend(String username, String friendName) throws SQLException {
+        qr.update(REMOVEFRIENDSQL, username, friendName);
+    }
+
     //TODO: improve code
     public List<String> get_friends(String name) throws SQLException {
         return qr.query(GETFRIENDSSQL, new ColumnListHandler<String>("friendname"), name);
+    }
+
+    public List<String> get_pending_friends(String name) throws SQLException {
+        return qr.query(GETPENDINGFRIENDSSQL, new ColumnListHandler<String>("username"), name);
+    }
+
+    public void accept_friend_request(String name, String friendName) throws SQLException {
+        qr.update(ACCEPTFRIENDSQL, name, friendName);
     }
 
     public void change_email(String username, String email) throws SQLException, EmptyFieldException {

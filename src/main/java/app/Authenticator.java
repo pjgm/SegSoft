@@ -28,7 +28,13 @@ public interface Authenticator {
 
 	void add_friend(String username, String friendName, int status) throws SQLException;
 
+	void remove_friend(String username, String friendName) throws SQLException;
+
+	List<String> get_pending_friends(String name) throws SQLException;
+
 	List<String> get_friends(String name) throws SQLException;
+
+	void accept_friend_request(String name, String friendName) throws SQLException;
 
 	void change_email(String username, String email) throws SQLException, EmptyFieldException;
 

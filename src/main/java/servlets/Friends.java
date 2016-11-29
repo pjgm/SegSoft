@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -32,12 +33,31 @@ public class Friends extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO: fix bad code
+
+
         try {
             HttpSession session = request.getSession(false);
             Account acc = (AccountClass) session.getAttribute("USER");
             String username = acc.getUsername();
+            String pendingFriendList = "<table><tr><th>Name</th><th>Action</th></tr>";
             String friendList = "<table><tr><th>Name</th><th>Email</th><th>Phone</th></tr>";
+            List<String> plist = auth.get_pending_friends(username);
             List<String> flist = auth.get_friends(username);
+
+            for (String friend: plist) {
+                Account account = auth.get_account(friend);
+                if (account.getLocked() == 1)
+                    continue;
+
+                pendingFriendList += "<tr>";
+                pendingFriendList += "<td><a href=\"/User/" + friend + "\">" + friend + "</a>" + "</td>";
+                pendingFriendList += "<td>" + "<input type=\"submit\" name=\"submitButton\" value=\"Accept-" +
+                        friend + "\"/>" + "<input type=\"submit\" name=\"submitButton\" value=\"Decline\"/></td>";
+                pendingFriendList += "</tr>";
+            }
+
+            pendingFriendList += "</table>";
+            request.setAttribute("pendingFriendList", pendingFriendList);
 
             for (String friend : flist) {
                 Account account = auth.get_account(friend);
@@ -63,17 +83,42 @@ public class Friends extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String friendName = request.getParameter("username");
         HttpSession session = request.getSession(false);
         Account acc = (Account) session.getAttribute("USER");
-        try {
-            auth.add_friend(acc.getUsername(), friendName, 0);
-            LOGGER.log(Level.FINE, acc.getUsername() + "ADDED FRIEND " + friendName);
-            request.setAttribute("errorMessage", "Friend added successfully");
-        } catch (SQLException e) {
-            request.setAttribute("errorMessage", e.getMessage());
-        } finally {
+
+        String submitButton = request.getParameter("submitButton");
+
+        if(submitButton != null) {
+            String friendName = submitButton.split("-")[1];
+            if (submitButton.contains("Accept")) {
+                try {
+                    auth.add_friend(acc.getUsername(), friendName, 1);
+                    auth.accept_friend_request(friendName, acc.getUsername());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (submitButton.contains("Decline")) {
+                try {
+                    auth.remove_friend(friendName, acc.getUsername());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             doGet(request, response);
+        }
+
+        String friendName = request.getParameter("username");
+        if (!friendName.isEmpty()) {
+            try {
+                auth.add_friend(acc.getUsername(), friendName, 0);
+                LOGGER.log(Level.FINE, acc.getUsername() + "ADDED FRIEND " + friendName);
+                request.setAttribute("errorMessage", "Friend request sent successfully");
+            } catch (SQLException e) {
+                request.setAttribute("errorMessage", e.getMessage());
+            } finally {
+                doGet(request, response);
+            }
         }
     }
 }

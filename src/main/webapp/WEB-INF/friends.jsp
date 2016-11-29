@@ -36,6 +36,10 @@
     Username: <input type="text" name="username"/> <br/>
     <input type="submit" value="Submit"/>
 
+    <h1>Friend Requests</h1>
+
+    ${pendingFriendList}
+
     <h1>Friend List</h1>
 
     ${friendlist}
