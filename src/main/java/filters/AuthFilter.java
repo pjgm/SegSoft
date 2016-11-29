@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
         try {
             List<CapabilityClass> caps = ac.getCapabilities(username);
             for (Capability cap : caps)
-                if (ac.checkPermission(cap) && cap.getResource().equals(resource))
+                if (ac.checkPermission(cap) && resource.contains(cap.getResource()))
                     hasPermission = true;
 
         } catch (SQLException e) {

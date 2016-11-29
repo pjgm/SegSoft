@@ -78,6 +78,7 @@ public class CreateUser extends HttpServlet {
             auth.create_account(username, password, password2, email, phone, Roles.USER.name());
             ac.createCapability("root", username, "", "RWX");
             ac.createCapability("root", username, "Home", "RWX");
+            ac.createCapability("root", username, "User", "RWX");
             ac.createCapability("root", username, "MyProfile", "RWX");
             ac.createCapability("root", username, "Friends", "RWX");
             ac.createCapability("root", username, "ChangePassword", "RWX");

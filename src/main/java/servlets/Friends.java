@@ -36,19 +36,23 @@ public class Friends extends HttpServlet {
             HttpSession session = request.getSession(false);
             Account acc = (AccountClass) session.getAttribute("USER");
             String username = acc.getUsername();
-            List<String> friendsNames = auth.get_friends(username);
-            List<Account> friendsList = new ArrayList<Account>();
+            String friendList = "<table><tr><th>Name</th><th>Email</th><th>Phone</th></tr>";
+            List<String> flist = auth.get_friends(username);
 
-            int i = 0;
-            for (String friend : friendsNames) {
+            for (String friend : flist) {
                 Account account = auth.get_account(friend);
-                if (account.getLocked() != 1)
-                    friendsList.add(acc);
-                    System.out.println(friendsList.get(i).getUsername());
-                    i++;
+                if (account.getLocked() == 1)
+                    continue;
+
+                friendList += "<tr>";
+                friendList += "<td>" + "<a href=\"/User/" + friend + "\">" + friend + "</a>" + "</td>";
+                friendList += "<td>" + account.getEmail() + "</td>";
+                friendList += "<td>" + account.getPhone() + "</td>";
+                friendList += "</tr>";
             }
 
-            request.setAttribute("friendlist", friendsList);
+            friendList += "</table>";
+            request.setAttribute("friendlist", friendList);
 
         } catch (SQLException | NullPointerException | UndefinedAccountException e) {
             e.printStackTrace();
@@ -63,7 +67,7 @@ public class Friends extends HttpServlet {
         HttpSession session = request.getSession(false);
         Account acc = (Account) session.getAttribute("USER");
         try {
-            auth.add_friend(acc.getUsername(), friendName);
+            auth.add_friend(acc.getUsername(), friendName, 0);
             LOGGER.log(Level.FINE, acc.getUsername() + "ADDED FRIEND " + friendName);
             request.setAttribute("errorMessage", "Friend added successfully");
         } catch (SQLException e) {

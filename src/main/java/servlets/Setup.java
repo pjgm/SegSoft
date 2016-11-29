@@ -55,6 +55,7 @@ public class Setup extends HttpServlet {
             ac.createCapability("system", "root", "", "RWX");
             ac.createCapability("system", "root", "Admin", "RWX");
             ac.createCapability("system", "root", "Home", "RWX");
+            ac.createCapability("system", "root", "User", "RWX");
             ac.createCapability("system", "root", "CreateUser", "RWX");
             ac.createCapability("system", "root", "DeleteUser", "RWX");
             ac.createCapability("system", "root", "MyProfile", "RWX");

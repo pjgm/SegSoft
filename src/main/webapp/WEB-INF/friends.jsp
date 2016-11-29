@@ -5,6 +5,21 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>FriendList</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
 </head>
 <body>
 <a href="/">home</a>
@@ -21,24 +36,9 @@
     Username: <input type="text" name="username"/> <br/>
     <input type="submit" value="Submit"/>
 
-<h1>Friend List</h1>
+    <h1>Friend List</h1>
 
-    <table  class="table table-striped">
-        <thead>
-        <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>Phone</td>
-        </tr>
-        </thead>
-                <forEach var="account" items="${friendlist}">
-                    <tr>
-                        <td><a href="/User/${account.name}">${account.name}</a></td>
-                        <td>${account.emai}</td>
-                        <td>${account.phone}</td>
-                    </tr>
-                </forEach>
-            </table>
+    ${friendlist}
 
 </form>
 </body>

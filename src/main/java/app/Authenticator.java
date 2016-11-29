@@ -26,7 +26,7 @@ public interface Authenticator {
 
 	void unlock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException;
 
-	void add_friend(String username, String friendName) throws SQLException;
+	void add_friend(String username, String friendName, int status) throws SQLException;
 
 	List<String> get_friends(String name) throws SQLException;
 
