@@ -1,8 +1,8 @@
-package servlets;
+package main.java.servlets;
 
-import app.Authenticator;
-import exceptions.UndefinedAccountException;
-import model.Account;
+import main.java.app.Authenticator;
+import main.java.exceptions.UndefinedAccountException;
+import main.java.model.Account;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

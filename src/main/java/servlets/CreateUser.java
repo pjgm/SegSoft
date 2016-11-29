@@ -1,8 +1,15 @@
-package servlets;
+package main.java.servlets;
+
+import main.java.access_control.AccessController;
+import main.java.app.Authenticator;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.ExistingAccountException;
+import main.java.exceptions.PasswordMismatchException;
+import main.java.model.Roles;
+import main.java.validation.Validator;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -11,18 +18,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import access_control.AccessController;
-import access_control.Capability;
-import access_control.CapabilityClass;
-import app.Authenticator;
-import exceptions.EmptyFieldException;
-import exceptions.ExistingAccountException;
-import exceptions.PasswordMismatchException;
-import model.Account;
-import model.Roles;
-import validation.Validator;
 
 @WebServlet(name = "CreateUser", urlPatterns = { "/CreateUser" })
 public class CreateUser extends HttpServlet {

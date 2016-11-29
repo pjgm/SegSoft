@@ -1,13 +1,12 @@
-package servlets;
+package main.java.servlets;
 
-import access_control.AccessController;
-import access_control.AccessControllerClass;
-import app.Authenticator;
-import exceptions.EmptyFieldException;
-import exceptions.ExistingAccountException;
-import exceptions.PasswordMismatchException;
-import model.Roles;
-import validation.Validator;
+import main.java.access_control.AccessController;
+import main.java.app.Authenticator;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.ExistingAccountException;
+import main.java.exceptions.PasswordMismatchException;
+import main.java.model.Roles;
+import main.java.validation.Validator;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

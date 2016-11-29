@@ -1,11 +1,11 @@
-package filters;
+package main.java.filters;
 
-import access_control.AccessController;
-import access_control.Capability;
-import access_control.CapabilityClass;
-import app.Authenticator;
-import exceptions.UndefinedAccountException;
-import model.Account;
+import main.java.access_control.AccessController;
+import main.java.access_control.Capability;
+import main.java.access_control.CapabilityClass;
+import main.java.app.Authenticator;
+import main.java.exceptions.UndefinedAccountException;
+import main.java.model.Account;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

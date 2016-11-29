@@ -1,10 +1,10 @@
-package listeners;
+package main.java.listeners;
 
-import access_control.AccessController;
-import access_control.AccessControllerClass;
-import app.AuthenticatorClass;
-import app.Authenticator;
-import database.DataSourceManager;
+import main.java.access_control.AccessController;
+import main.java.access_control.AccessControllerClass;
+import main.java.app.Authenticator;
+import main.java.app.AuthenticatorClass;
+import main.java.database.DataSourceManager;
 
 import javax.servlet.annotation.WebListener;
 import javax.servlet.ServletContext;

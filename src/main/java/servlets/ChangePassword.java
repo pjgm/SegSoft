@@ -1,4 +1,11 @@
-package servlets;
+package main.java.servlets;
+
+import main.java.app.Authenticator;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.PasswordMismatchException;
+import main.java.model.Account;
+import main.java.model.AccountClass;
+import main.java.validation.Validator;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,13 +18,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import app.Authenticator;
-import exceptions.EmptyFieldException;
-import exceptions.PasswordMismatchException;
-import model.Account;
-import model.AccountClass;
-import validation.Validator;
 
 @WebServlet(name = "ChangePassword", urlPatterns = { "/ChangePassword" })
 public class ChangePassword extends HttpServlet {

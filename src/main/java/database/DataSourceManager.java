@@ -1,8 +1,6 @@
-package database;
+package main.java.database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-
-import java.util.Properties;
 
 public class DataSourceManager {
 
