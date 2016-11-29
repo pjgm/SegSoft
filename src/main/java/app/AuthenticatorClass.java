@@ -20,7 +20,8 @@ public class AuthenticatorClass implements Authenticator {
             "integer, locked integer, salt string)";
     private static final String CREATEFRIENDTABLESQL = "create table if not exists friend (username string, " +
             "friendname string, primary key(username, friendname), foreign key(username) references account(username)" +
-            ", foreign key (friendname) references account(username), check (username != friendname))";
+            " ON DELETE CASCADE" +
+            ", foreign key (friendname) references account(username) ON DELETE CASCADE, check (username != friendname))";
     private static final String SELECTBYNAMESQL = "select * from account where username LIKE ?";
     private static final String INSERTUSERSQL = "insert into account (username, password, email, phone, bio, " +
             "secretinfo, role, loggedIn, locked, salt) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -39,7 +40,8 @@ public class AuthenticatorClass implements Authenticator {
     //capabilities
     private static final String CREATECAPTABLESQL = "create table if not exists capability (grantee string, owner " +
             "string, resource string, operation string, creationTime timestamp default current_timestamp not null, " +
-            "foreign key (grantee) references account(username), foreign key (owner) references account (username) " +
+            "foreign key (grantee) references account(username) ON DELETE CASCADE, foreign key (owner) references " +
+            "account (username) ON DELETE CASCADE " +
             "primary key (grantee, owner, resource, operation), check (grantee != owner))";
 
     private QueryRunner qr;

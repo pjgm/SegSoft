@@ -50,10 +50,10 @@ public class Setup extends HttpServlet {
 
         ServletContext sc = getServletContext();
 
-
         try {
             auth.create_account("system", password, password, "system@system.com" , "00000", "system");
             auth.create_account("root", password, password, "admin@admin.com", "911111111", Roles.ADMIN.name());
+            ac.createCapability("system", "root", "", "RWX");
             ac.createCapability("system", "root", "Admin", "RWX");
             ac.createCapability("system", "root", "Home", "RWX");
             ac.createCapability("system", "root", "CreateUser", "RWX");

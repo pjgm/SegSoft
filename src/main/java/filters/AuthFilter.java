@@ -49,37 +49,43 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession(false);
-        String requestURI = request.getRequestURI();
-        String setupURI = "/Setup";
-        String loginURI = "/Login";
-        String rootURI = "/";
 
+        String requestURI = request.getRequestURI();
+
+        String setupURI = "/Setup";
         boolean setupDone = (boolean) config.getServletContext().getAttribute("isSetupDone");
-        boolean setupRequest = request.getRequestURI().equals(setupURI);
+        boolean isSetupRequest = request.getRequestURI().equals(setupURI);
+
+        String loginURI = "/Login";
+        boolean isLoginRequest = requestURI.equals(loginURI);
 
         boolean loggedIn = session != null && session.getAttribute("USER") != null;
-        boolean loginRequest = requestURI.equals(loginURI);
-        boolean rootRequest = requestURI.equals(rootURI);
-
         boolean hasPermission = false;
 
-        if(!setupDone) {
-            if (setupRequest)
+
+        if (!setupDone) {
+            if (isSetupRequest)
                 filterChain.doFilter(request, response);
             else
                 response.sendRedirect(setupURI);
             return;
         }
+        else if (!loggedIn) {
+            if (isLoginRequest)
+                filterChain.doFilter(request, response);
+            else
+                response.sendRedirect(loginURI);
+            return;
+        }
 
-        if (loggedIn) {
-            Account acc = (Account) session.getAttribute("USER");
-            try {
-                acc = auth.get_account(acc.getUsername());
-                session.setAttribute("USER", acc);
-                hasPermission = hasPermission(acc.getUsername(), requestURI.substring(1));
-            } catch (SQLException | UndefinedAccountException e) {
-                e.printStackTrace();
-            }
+        Account acc = (Account) session.getAttribute("USER");
+
+        try {
+            acc = auth.get_account(acc.getUsername());
+            session.setAttribute("USER", acc);
+            hasPermission = hasPermission(acc.getUsername(), requestURI.substring(1));
+        } catch (SQLException | UndefinedAccountException e) {
+            e.printStackTrace();
         }
 
         boolean isLocked = loggedIn && ((Account) session.getAttribute("USER")).getLocked() == 1;
@@ -90,15 +96,12 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (loggedIn && !hasPermission){
+        if (!hasPermission){
             response.getOutputStream().print("Error: You have no permission to access this page");
             return;
         }
 
-        if (loggedIn || loginRequest)
-            filterChain.doFilter(request, response);
-        else
-            response.sendRedirect(loginURI);
+        filterChain.doFilter(request, response);
     }
 
     @Override
