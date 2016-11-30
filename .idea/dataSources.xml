@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Sqlite (Xerial) - Auth.db" uuid="38f0c110-9de5-4da0-8827-051a1b68b77f">
+    <data-source source="LOCAL" name="Sqlite (Xerial) - Auth.db" uuid="6132764b-fa49-4da9-80b0-b38052eeeca7">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$USER_HOME$/Desktop/apache-tomcat-9.0.0.M11/bin/Auth.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$USER_HOME$/Downloads/apache-tomcat-9.0.0.M10/bin/Auth.db</jdbc-url>
     </data-source>
   </component>
 </project>
