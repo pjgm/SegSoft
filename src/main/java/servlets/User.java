@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Logger;
 
-@WebServlet(name = "User", urlPatterns = { "/User/*"} )
+@WebServlet(name = "User", urlPatterns = { "/User/*" })
 public class User extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(User.class.getName());
@@ -27,7 +27,6 @@ public class User extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         HttpSession session = request.getSession(false);
         String username = ((AccountClass) session.getAttribute("USER")).getUsername();
 
@@ -37,6 +36,7 @@ public class User extends HttpServlet {
             response.sendRedirect("/Friends");
             return;
         }
+
         profileName = profileName.substring(1);
 
         boolean isFriend = false;
@@ -61,14 +61,35 @@ public class User extends HttpServlet {
                 response.sendRedirect("/Friends");
                 return;
             }
+
             String userInfo;
 
-
-            if (isFriend)
-                userInfo = acc.getUsername() + "<br/>" + acc.getEmail() + "<br/>" + acc.getPhone() + "<br/>"
-                    + acc.getBio() + "<br/>";
-            else
-                userInfo = acc.getUsername() + "<br/>" + acc.getEmail() + "<br/>" + acc.getPhone() + "<br/>";
+            if (isFriend) {
+                userInfo = acc.getUsername() + "<br/>";
+                if(!acc.getEmailPL().equals("private"))
+                    userInfo += acc.getEmail() + "<br/>";
+                if(!acc.getPhonePL().equals("private"))
+                    userInfo += acc.getPhone() + "<br/>";
+                if(!acc.getPIPL().equals("private"))
+                    userInfo += acc.getPublicInfo() + "<br/>";
+                if(!acc.getIIPL().equals("private"))
+                    userInfo += acc.getInternalInfo() + "<br/>";
+                if(!acc.getSIPL().equals("private"))
+                    userInfo += acc.getSecretInfo() + "<br/>";
+            }
+            else {
+                userInfo = acc.getUsername() + "<br/>";
+                if(acc.getEmailPL().equals("public") || profileName.equals(username))
+                    userInfo += acc.getEmail() + "<br/>";
+                if(acc.getPhonePL().equals("public") || profileName.equals(username))
+                    userInfo += acc.getPhone() + "<br/>";
+                if(acc.getPIPL().equals("public") || profileName.equals(username))
+                    userInfo += acc.getPublicInfo() + "<br/>";
+                if(acc.getIIPL().equals("public") || profileName.equals(username))
+                    userInfo += acc.getInternalInfo() + "<br/>";
+                if(acc.getSIPL().equals("public") || profileName.equals(username))
+                    userInfo += acc.getSecretInfo() + "<br/>";
+            }
 
             request.setAttribute("msg", userInfo);
         } catch (SQLException | UndefinedAccountException e) {
@@ -79,6 +100,5 @@ public class User extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     }
 }

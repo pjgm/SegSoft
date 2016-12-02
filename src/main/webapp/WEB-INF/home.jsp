@@ -14,7 +14,6 @@
 <a href="/DeleteUser">delete_user</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
-
 <h1>Welcome to SecurityBook!</h1>
 </body>
 </html>

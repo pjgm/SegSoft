@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//Info on servlet url patterns: http://stackoverflow.com/questions/4140448/difference-between-and-in-servlet-mapping-url-pattern
-// The / doesn't override any other servlet. It only replaces the servletcontainer's builtin default servlet for all requests which doesn't match any other registered servlet.
+// Info on servlet url patterns: http://stackoverflow.com/questions/4140448/difference-between-and-in-servlet-mapping-url-pattern
+// The / doesn't override any other servlet. It only replaces the servletcontainer's builtin default servlet for all requests that don't match any other registered servlet.
 @WebServlet(name = "Home Page", urlPatterns = { "/Home", "/" })
 public class Home extends HttpServlet {
 

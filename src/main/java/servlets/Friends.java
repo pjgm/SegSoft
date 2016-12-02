@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 @WebServlet(name = "Friends", urlPatterns = { "/Friends" })
 public class Friends extends HttpServlet {
 
@@ -33,14 +32,12 @@ public class Friends extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //TODO: fix bad code
-
-
         try {
             HttpSession session = request.getSession(false);
             Account acc = (AccountClass) session.getAttribute("USER");
             String username = acc.getUsername();
             String pendingFriendList = "<table><tr><th>Name</th><th>Action</th></tr>";
-            String friendList = "<table><tr><th>Name</th><th>Email</th><th>Phone</th></tr>";
+            String friendList = "<table><tr><th>Name</th></tr>";
             List<String> plist = auth.get_pending_friends(username);
             List<String> flist = auth.get_friends(username);
 
@@ -66,8 +63,6 @@ public class Friends extends HttpServlet {
 
                 friendList += "<tr>";
                 friendList += "<td>" + "<a href=\"/User/" + friend + "\">" + friend + "</a>" + "</td>";
-                friendList += "<td>" + account.getEmail() + "</td>";
-                friendList += "<td>" + account.getPhone() + "</td>";
                 friendList += "</tr>";
             }
 
@@ -83,10 +78,10 @@ public class Friends extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String submitButton = request.getParameter("submitButton");
+
         HttpSession session = request.getSession(false);
         Account acc = (Account) session.getAttribute("USER");
-
-        String submitButton = request.getParameter("submitButton");
 
         if(submitButton != null) {
             String friendName = submitButton.split("-")[1];
@@ -105,6 +100,7 @@ public class Friends extends HttpServlet {
                     e.printStackTrace();
                 }
             }
+
             doGet(request, response);
         }
 

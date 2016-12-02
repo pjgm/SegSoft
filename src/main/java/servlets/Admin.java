@@ -13,20 +13,24 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-@WebServlet(name = "Admin", urlPatterns = {"/Admin"})
+@WebServlet(name = "Admin", urlPatterns = { "/Admin" })
 public class Admin extends HttpServlet {
 
-    private Authenticator auth;
     private static final Logger LOGGER = Logger.getLogger(Admin.class.getName());
+    private Authenticator auth;
 
     @Override
     public void init() {
         this.auth = (Authenticator) getServletContext().getAttribute("authenticator");
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request,response);
+    }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String submitButton = request.getParameter("submitButton");
+
         try {
             if (submitButton.equals("lock")) {
                 String lockUsername = request.getParameter("lockUsername");
@@ -42,10 +46,7 @@ public class Admin extends HttpServlet {
         catch (EmptyFieldException | SQLException | UndefinedAccountException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
-        request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
-    }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
     }
 }

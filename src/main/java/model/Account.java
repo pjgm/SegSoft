@@ -14,9 +14,45 @@ public interface Account {
 
     void setEmail(String email);
 
+    String getEmailPL();
+
+    void setEmailPL(String lvl);
+
     String getPhone();
 
     void setPhone(String phone);
+
+    String getPhonePL();
+
+    void setPhonePL(String lvl);
+
+    String getRole();
+
+    void setRole(String role);
+
+    String getPublicInfo();
+
+    void setPublicInfo(String publicInfo);
+
+    String getPIPL();
+
+    void setPIPL(String lvl);
+
+    String getInternalInfo();
+
+    void setInternalInfo(String internalInfo);
+
+    String getIIPL();
+
+    void setIIPL(String lvl);
+
+    String getSecretInfo();
+
+    void setSecretInfo(String secretInfo);
+
+    String getSIPL();
+
+    void setSIPL(String lvl);
 
     int getLoggedIn();
 
@@ -29,17 +65,4 @@ public interface Account {
     String getSalt();
 
     void setSalt(String salt);
-
-    String getRole();
-
-    void setRole(String role);
-
-    String getBio();
-
-    void setBio(String bio);
-
-    String getSecretInfo();
-
-    void setSecretInfo(String secretInfo);
-
 }

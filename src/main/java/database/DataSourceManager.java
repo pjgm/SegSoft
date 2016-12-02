@@ -19,6 +19,4 @@ public class DataSourceManager {
     public BasicDataSource getDataSource() {
         return dataSource;
     }
-
-
 }

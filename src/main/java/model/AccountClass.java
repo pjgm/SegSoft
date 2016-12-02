@@ -2,11 +2,11 @@ package main.java.model;
 
 public class AccountClass implements Account {
 
-    private String username, password, email, phone, role, bio, secretInfo, salt;
+    private String username, password, email, emailpl, phone, phonepl, role, publicInfo, pipl, internalInfo, iipl,
+            secretInfo, sipl, salt;
     private int loggedIn, locked;
 
     public AccountClass() {
-
     }
 
     public String getUsername() {
@@ -33,12 +33,28 @@ public class AccountClass implements Account {
         this.email = email;
     }
 
+    public String getEmailPL() {
+        return emailpl;
+    }
+
+    public void setEmailPL(String lvl) {
+        this.emailpl = lvl;
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPhonePL() {
+        return phonepl;
+    }
+
+    public void setPhonePL(String lvl) {
+        this.phonepl = lvl;
     }
 
     public String getRole() {
@@ -49,12 +65,36 @@ public class AccountClass implements Account {
         this.role = role;
     }
 
-    public String getBio() {
-        return bio;
+    public String getPublicInfo() {
+        return publicInfo;
     }
 
-    public void setBio(String bio) {
-        this.bio = bio;
+    public void setPublicInfo(String publicInfo) {
+        this.publicInfo = publicInfo;
+    }
+
+    public String getPIPL() {
+        return pipl;
+    }
+
+    public void setPIPL(String lvl) {
+        this.pipl = lvl;
+    }
+
+    public String getInternalInfo() {
+        return internalInfo;
+    }
+
+    public void setInternalInfo(String internalInfo) {
+        this.internalInfo = internalInfo;
+    }
+
+    public String getIIPL() {
+        return iipl;
+    }
+
+    public void setIIPL(String lvl) {
+        this.iipl = lvl;
     }
 
     public String getSecretInfo() {
@@ -63,6 +103,14 @@ public class AccountClass implements Account {
 
     public void setSecretInfo(String secretInfo) {
         this.secretInfo = secretInfo;
+    }
+
+    public String getSIPL() {
+        return sipl;
+    }
+
+    public void setSIPL(String lvl) {
+        this.sipl = lvl;
     }
 
     public int getLoggedIn() {
@@ -88,5 +136,4 @@ public class AccountClass implements Account {
     public void setSalt(String salt) {
         this.salt = salt;
     }
-
 }

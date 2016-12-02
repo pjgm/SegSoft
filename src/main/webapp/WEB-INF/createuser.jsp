@@ -16,17 +16,13 @@
 <a href="/Logout">logout</a>
 <h1>Create a new User</h1>
 <form name="createUserForm" method="post" action="CreateUser">
-
     <div style="color: #FF0000;">${errorMessage}</div>
-
     Username: <input type="text" name="username"/> <br/>
     Password: <input type="password" name="password"/> <br/>
     Confirm Password: <input type="password" name="password2"/> <br/>
     Email: <input type="text" name="email"/> <br/>
     Phone Number: <input type="text" name="phone"/> <br/>
-
     <input type="submit" value="Submit"/>
-
 </form>
 </body>
 </html>

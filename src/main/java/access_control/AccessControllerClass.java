@@ -11,11 +11,11 @@ import java.util.List;
 
 public class AccessControllerClass implements AccessController {
 
-    private static final String INSERTCAPABILITYSQL = "insert into capability (grantee, owner, resource, operation) " +
+    private static final String INSERTCAPSQL = "insert into capability (grantee, owner, resource, operation) " +
             "values (?, ?, ?, ?)";
     private static final String SELECTCAPSQL = "select * from capability where owner = ? and grantee = ? and resource" +
             " = ? and operation = ?";
-    private static final String GETCAPABILITIESSSQL = "select * from capability where grantee = ?";
+    private static final String GETCAPSSQL = "select * from capability where grantee = ?";
 
     private QueryRunner qr;
     private ResultSetHandler rsh;
@@ -26,13 +26,12 @@ public class AccessControllerClass implements AccessController {
     }
 
     public void createCapability(String owner, String grantee, String resource, String operation) throws SQLException {
-        qr.insert(INSERTCAPABILITYSQL, rsh, grantee, owner, resource, operation);
+        qr.insert(INSERTCAPSQL, rsh, grantee, owner, resource, operation);
     }
 
     public Capability getCapability(String owner, String grantee, String resource, String operation) throws SQLException {
         return (CapabilityClass) qr.query(SELECTCAPSQL, rsh, owner, grantee, resource, operation);
     }
-
 
     public boolean checkPermission(Capability capability) throws SQLException {
         //TODO: Timeouts
@@ -42,6 +41,6 @@ public class AccessControllerClass implements AccessController {
     }
 
     public List<CapabilityClass> getCapabilities(String user) throws SQLException {
-        return qr.query(GETCAPABILITIESSSQL, new BeanListHandler<>(CapabilityClass.class), user);
+        return qr.query(GETCAPSSQL, new BeanListHandler<>(CapabilityClass.class), user);
     }
 }

@@ -12,5 +12,4 @@ public class LockedAccountException extends Exception {
 	public String getMessage() {
 		return message;
 	}
-
 }

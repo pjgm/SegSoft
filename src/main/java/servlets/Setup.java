@@ -50,20 +50,20 @@ public class Setup extends HttpServlet {
         ServletContext sc = getServletContext();
 
         try {
-            auth.create_account("system", password, password, "system@system.com" , "00000", "system");
-            auth.create_account("root", password, password, "admin@admin.com", "911111111", Roles.ADMIN.name());
+            auth.create_account("system", password, password, "system@system.com" , "000000", "SYSTEM");
+            auth.create_account("root", password, password, "admin@admin.com", "910000000", Roles.ADMIN.name());
             ac.createCapability("system", "root", "", "RWX");
             ac.createCapability("system", "root", "Admin", "RWX");
             ac.createCapability("system", "root", "Home", "RWX");
             ac.createCapability("system", "root", "User", "RWX");
+            ac.createCapability("system", "root", "ChangePassword", "RWX");
             ac.createCapability("system", "root", "CreateUser", "RWX");
             ac.createCapability("system", "root", "DeleteUser", "RWX");
-            ac.createCapability("system", "root", "MyProfile", "RWX");
             ac.createCapability("system", "root", "Friends", "RWX");
-            ac.createCapability("system", "root", "ChangePassword", "RWX");
             ac.createCapability("system", "root", "Logout", "RWX");
-            LOGGER.log(Level.FINE, "ROOT SETUP SUCCESSFUL");
+            ac.createCapability("system", "root", "MyProfile", "RWX");
             sc.setAttribute("isSetupDone", auth.isSetupDone());
+            LOGGER.log(Level.FINE, "ROOT SETUP SUCCESSFUL");
             request.setAttribute("errorMessage", "Admin created successfully");
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
         } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {

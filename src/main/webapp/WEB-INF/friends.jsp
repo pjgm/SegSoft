@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>FriendList</title>
+    <title>Friend List</title>
     <style>
         table {
             font-family: arial, sans-serif;
@@ -29,21 +29,15 @@
 <a href="/DeleteUser">delete_user</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
-<h1>Add new Friend</h1>
-
+<h1>Add a new Friend</h1>
 <form name="FriendsForm" method="post" action="Friends">
     <div style="color: #FF0000;">${errorMessage}</div>
     Username: <input type="text" name="username"/> <br/>
     <input type="submit" value="Submit"/>
-
     <h1>Friend Requests</h1>
-
     ${pendingFriendList}
-
     <h1>Friend List</h1>
-
     ${friendlist}
-
 </form>
 </body>
 </html>

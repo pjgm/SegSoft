@@ -37,10 +37,10 @@ public class AuthFilter implements Filter {
             for (Capability cap : caps)
                 if (ac.checkPermission(cap) && resource.contains(cap.getResource()))
                     hasPermission = true;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return hasPermission;
     }
 
@@ -61,7 +61,6 @@ public class AuthFilter implements Filter {
 
         boolean loggedIn = session != null && session.getAttribute("USER") != null;
         boolean hasPermission = false;
-
 
         if (!setupDone) {
             if (isSetupRequest)
@@ -96,7 +95,7 @@ public class AuthFilter implements Filter {
             return;
         }
 
-        if (!hasPermission){
+        if (!hasPermission) {
             response.getOutputStream().print("Error: You have no permission to access this page");
             return;
         }

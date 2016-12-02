@@ -28,7 +28,6 @@ public class DeleteUser extends HttpServlet {
 		this.auth = (Authenticator) getServletContext().getAttribute("authenticator");
 	}
 
-
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
@@ -36,7 +35,6 @@ public class DeleteUser extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		String username = request.getParameter("username");
 
 		try {

@@ -14,7 +14,7 @@
 <a href="/DeleteUser">delete_user</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
-<h1>Deletes a User</h1>
+<h1>Delete a User</h1>
 <form name="deleteUserForm" method="post" action="DeleteUser">
     <div style="color: #FF0000;">${errorMessage}</div>
     Username: <input type="text" name="username"/> <br/> <input

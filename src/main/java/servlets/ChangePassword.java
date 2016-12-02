@@ -22,8 +22,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "ChangePassword", urlPatterns = { "/ChangePassword" })
 public class ChangePassword extends HttpServlet {
 
-	private Authenticator auth;
 	private static final Logger LOGGER = Logger.getLogger(ChangePassword.class.getName());
+	private Authenticator auth;
 	private Validator val;
 
 	@Override
@@ -39,7 +39,6 @@ public class ChangePassword extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
 		String password = request.getParameter("password");
 		String password2 = request.getParameter("password2");
 
@@ -57,7 +56,7 @@ public class ChangePassword extends HttpServlet {
 			LOGGER.log(Level.FINE, "PASSWORD CHANGE FOR USER " + username);
 			auth.logout(acc);
 			session.invalidate();
-			request.setAttribute("errorMessage", "Password changed sucessfully");
+			request.setAttribute("errorMessage", "Password changed successfully");
 		} catch (SQLException | PasswordMismatchException | EmptyFieldException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
