@@ -17,4 +17,6 @@ Now you're ready to explore and use the system as you desire.
 
 **Note**: Usernames must be strings composed of at least 2 to 16 **lowercase** characters.
 
+**Observation**: Both the *advanced* extra requirements were implemented in our project (data privacy level definition and friend requests).
+
 [1]: https://maven.apache.org/
