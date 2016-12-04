@@ -130,7 +130,7 @@ public class AuthenticatorClass implements Authenticator {
         qr.update(UPDATEPASSWORDSQL, pwd1, salt, name);
     }
 
-    public void lock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException {
+    public void lock_account(String name) throws SQLException, UndefinedAccountException, EmptyFieldException {
         if (name.isEmpty())
             throw new EmptyFieldException();
 
@@ -140,7 +140,7 @@ public class AuthenticatorClass implements Authenticator {
             throw new UndefinedAccountException();
     }
 
-    public void unlock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException {
+    public void unlock_account(String name) throws SQLException, UndefinedAccountException, EmptyFieldException {
         if (name.isEmpty())
             throw new EmptyFieldException();
 
@@ -150,11 +150,48 @@ public class AuthenticatorClass implements Authenticator {
             throw new UndefinedAccountException();
     }
 
-    public void add_friend(String username, String friendName, int status) throws SQLException {
+    public boolean isFriend(String username, String friendName) throws SQLException {
+        boolean is = false;
+        List<String> friendList = get_friends(username);
+
+        for (String friend: friendList) {
+            if (friend.equals(friendName)) {
+                is = true;
+                break;
+            }
+        }
+
+        return is;
+    }
+
+    public void add_friend(String username, String friendName, int status) throws SQLException, UndefinedAccountException,
+            SelfFriendRequestException, EmptyFieldException {
+        if (friendName.isEmpty())
+            throw new EmptyFieldException();
+
+        if (!account_exists(friendName))
+            throw new UndefinedAccountException();
+
+        if(username.equals(friendName))
+            throw new SelfFriendRequestException();
+
         qr.insert(ADDFRIENDSQL, new ColumnListHandler<String>(), username, friendName, status);
     }
 
-    public void remove_friend(String username, String friendName) throws SQLException {
+    public void remove_friend(String username, String friendName) throws SQLException, UndefinedFriendException, UndefinedAccountException,
+            SelfFriendRequestException, EmptyFieldException {
+        if (friendName.isEmpty())
+            throw new EmptyFieldException();
+
+        if (!account_exists(friendName))
+            throw new UndefinedAccountException();
+
+        if(username.equals(friendName))
+            throw new SelfFriendRequestException();
+
+        if(!isFriend(username, friendName))
+            throw new UndefinedFriendException();
+
         qr.update(REMOVEFRIENDSQL, username, friendName);
     }
 

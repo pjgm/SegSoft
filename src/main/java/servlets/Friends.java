@@ -1,7 +1,10 @@
 package main.java.servlets;
 
 import main.java.app.Authenticator;
+import main.java.exceptions.EmptyFieldException;
+import main.java.exceptions.SelfFriendRequestException;
 import main.java.exceptions.UndefinedAccountException;
+import main.java.exceptions.UndefinedFriendException;
 import main.java.model.Account;
 import main.java.model.AccountClass;
 
@@ -89,32 +92,47 @@ public class Friends extends HttpServlet {
                 try {
                     auth.add_friend(acc.getUsername(), friendName, 1);
                     auth.accept_friend_request(friendName, acc.getUsername());
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                } catch (SQLException | UndefinedAccountException | SelfFriendRequestException | EmptyFieldException e) {
+                    request.setAttribute("errorMessage", e.getMessage());
                 }
             }
             if (submitButton.contains("Decline")) {
                 try {
                     auth.remove_friend(friendName, acc.getUsername());
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                } catch (SQLException | UndefinedFriendException | UndefinedAccountException | SelfFriendRequestException | EmptyFieldException e) {
+                    request.setAttribute("errorMessage", e.getMessage());
                 }
             }
 
             doGet(request, response);
         }
 
-        String friendName = request.getParameter("username");
-        if (!friendName.isEmpty()) {
+        String submit = request.getParameter("submitButton2");
+
+        if (submit.equals("add")) {
             try {
+                String friendName = request.getParameter("usernameAdd");
                 auth.add_friend(acc.getUsername(), friendName, 0);
                 LOGGER.log(Level.FINE, acc.getUsername() + "ADDED FRIEND " + friendName);
                 request.setAttribute("errorMessage", "Friend request sent successfully");
-            } catch (SQLException e) {
+            } catch(SQLException e){
+                request.setAttribute("errorMessage", "User already added/friend request already sent");
+            } catch (UndefinedAccountException | SelfFriendRequestException | EmptyFieldException e) {
                 request.setAttribute("errorMessage", e.getMessage());
-            } finally {
-                doGet(request, response);
             }
         }
+        if (submit.equals("remove")) {
+            try {
+                String friendName = request.getParameter("usernameRemove");
+                auth.remove_friend(acc.getUsername(), friendName);
+                auth.remove_friend(friendName, acc.getUsername());
+                LOGGER.log(Level.FINE, acc.getUsername() + "REMOVED FRIEND " + friendName);
+                request.setAttribute("errorMessage2", "Friend removed successfully");
+            } catch (SQLException | UndefinedFriendException | UndefinedAccountException | SelfFriendRequestException | EmptyFieldException e) {
+                request.setAttribute("errorMessage2", e.getMessage());
+            }
+        }
+
+        doGet(request, response);
     }
 }

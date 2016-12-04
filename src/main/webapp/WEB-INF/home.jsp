@@ -10,8 +10,8 @@
 <a href="/">home</a>
 <a href="/MyProfile">my_profile</a>
 <a href="/Friends">friends</a>
-<a href="/CreateUser">create_user</a>
-<a href="/DeleteUser">delete_user</a>
+<a href="/CreateAccount">create_account</a>
+<a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
 <h1>Welcome to SecurityBook!</h1>

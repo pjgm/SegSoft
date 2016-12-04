@@ -52,13 +52,12 @@ public class Setup extends HttpServlet {
         try {
             auth.create_account("system", password, password, "system@system.com" , "000000", "SYSTEM");
             auth.create_account("root", password, password, "admin@admin.com", "910000000", Roles.ADMIN.name());
-            ac.createCapability("system", "root", "", "RWX");
             ac.createCapability("system", "root", "Admin", "RWX");
             ac.createCapability("system", "root", "Home", "RWX");
             ac.createCapability("system", "root", "User", "RWX");
             ac.createCapability("system", "root", "ChangePassword", "RWX");
-            ac.createCapability("system", "root", "CreateUser", "RWX");
-            ac.createCapability("system", "root", "DeleteUser", "RWX");
+            ac.createCapability("system", "root", "CreateAccount", "RWX");
+            ac.createCapability("system", "root", "DeleteAccount", "RWX");
             ac.createCapability("system", "root", "Friends", "RWX");
             ac.createCapability("system", "root", "Logout", "RWX");
             ac.createCapability("system", "root", "MyProfile", "RWX");

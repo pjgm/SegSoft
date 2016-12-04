@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CreateUser", urlPatterns = { "/CreateUser" })
-public class CreateUser extends HttpServlet {
+@WebServlet(name = "CreateAccount", urlPatterns = { "/CreateAccount" })
+public class CreateAccount extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(CreateUser.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(CreateAccount.class.getName());
     private Authenticator auth;
     private AccessController ac;
     private Validator val;
@@ -35,7 +35,7 @@ public class CreateUser extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);
     }
 
     @Override
@@ -48,31 +48,30 @@ public class CreateUser extends HttpServlet {
 
         if (!val.validateUsername(username)) {
             request.setAttribute("errorMessage", "Username has invalid format");
-            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);
             return;
         }
 
         if (!val.validatePassword(password)) {
             request.setAttribute("errorMessage", "Password has invalid format");
-            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);
             return;
         }
 
         if (!val.validateEmail(email)) {
             request.setAttribute("errorMessage", "Email has invalid format");
-            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);
             return;
         }
 
         if (!val.validatePhone(phone)) {
             request.setAttribute("errorMessage", "Phone has invalid format");
-            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);
             return;
         }
 
         try {
             auth.create_account(username, password, password2, email, phone, Roles.USER.name());
-            ac.createCapability("root", username, "", "RWX");
             ac.createCapability("root", username, "Home", "RWX");
             ac.createCapability("root", username, "User", "RWX");
             ac.createCapability("root", username, "ChangePassword", "RWX");
@@ -81,10 +80,12 @@ public class CreateUser extends HttpServlet {
             ac.createCapability("root", username, "MyProfile", "RWX");
             LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
             request.setAttribute("errorMessage", "User created successfully");
-        } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "User already exists");
+        } catch (PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());
         } finally {
-            request.getRequestDispatcher("/WEB-INF/createuser.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);
         }
     }
 }

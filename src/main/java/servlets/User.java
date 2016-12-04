@@ -40,19 +40,11 @@ public class User extends HttpServlet {
         profileName = profileName.substring(1);
 
         boolean isFriend = false;
-        List<String> friendList = null;
 
         try {
-            friendList = auth.get_friends(username);
+            isFriend = auth.isFriend(username, profileName);
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        for (String friend: friendList) {
-            if (friend.equals(profileName)) {
-                isFriend = true;
-                break;
-            }
         }
 
         try {

@@ -184,8 +184,7 @@ public class MyProfile extends HttpServlet {
                 else
                     request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
             }
-        }
-        catch (EmptyFieldException | SQLException e) {
+        } catch (EmptyFieldException | SQLException e) {
             request.setAttribute("errorMessage", e.getMessage());
         }
 

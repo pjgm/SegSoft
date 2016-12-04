@@ -13,8 +13,8 @@ public class AccessControllerClass implements AccessController {
 
     private static final String INSERTCAPSQL = "insert into capability (grantee, owner, resource, operation) " +
             "values (?, ?, ?, ?)";
-    private static final String SELECTCAPSQL = "select * from capability where owner = ? and grantee = ? and resource" +
-            " = ? and operation = ?";
+    private static final String SELECTCAPSQL = "select * from capability where owner = ? and grantee = ? and resource " +
+            "= ? and operation = ?";
     private static final String GETCAPSSQL = "select * from capability where grantee = ?";
 
     private QueryRunner qr;

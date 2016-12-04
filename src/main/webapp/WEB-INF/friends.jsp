@@ -25,19 +25,23 @@
 <a href="/">home</a>
 <a href="/MyProfile">my_profile</a>
 <a href="/Friends">friends</a>
-<a href="/CreateUser">create_user</a>
-<a href="/DeleteUser">delete_user</a>
+<a href="/CreateAccount">create_account</a>
+<a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
 <h1>Add a new Friend</h1>
 <form name="FriendsForm" method="post" action="Friends">
     <div style="color: #FF0000;">${errorMessage}</div>
-    Username: <input type="text" name="username"/> <br/>
-    <input type="submit" value="Submit"/>
-    <h1>Friend Requests</h1>
-    ${pendingFriendList}
-    <h1>Friend List</h1>
-    ${friendlist}
+    Username: <input type="text" name="usernameAdd"/>
+    <input type="submit" name="submitButton2" value="add"/> <br/>
+<h1>Remove a Friend</h1>
+    <div style="color: #FF0000;">${errorMessage2}</div>
+    Username: <input type="text" name="usernameRemove"/>
+    <input type="submit" name="submitButton2" value="remove"/> <br/>
+<h1>Friend Requests</h1>
+${pendingFriendList}
+<h1>Friend List</h1>
+${friendlist}
 </form>
 </body>
 </html>

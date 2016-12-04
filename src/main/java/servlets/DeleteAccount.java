@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "DeleteUser", urlPatterns = { "/DeleteUser" })
-public class DeleteUser extends HttpServlet {
+@WebServlet(name = "DeleteAccount", urlPatterns = { "/DeleteAccount" })
+public class DeleteAccount extends HttpServlet {
 
-	private static final Logger LOGGER = Logger.getLogger(DeleteUser.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(DeleteAccount.class.getName());
 	private Authenticator auth;
 
 	public void init() {
@@ -30,7 +30,7 @@ public class DeleteUser extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/deleteaccount.jsp").forward(request, response);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class DeleteUser extends HttpServlet {
 		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {
-			request.getRequestDispatcher("/WEB-INF/deleteuser.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/deleteaccount.jsp").forward(request, response);
         }
     }
 }

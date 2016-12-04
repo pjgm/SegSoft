@@ -21,13 +21,17 @@ public interface Authenticator {
 	void change_pwd(String name, String pwd1, String pwd2)
 			throws SQLException, PasswordMismatchException, EmptyFieldException;
 
-	void lock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException;
+	void lock_account(String name) throws SQLException, UndefinedAccountException, EmptyFieldException;
 
-	void unlock_account(String name) throws EmptyFieldException, SQLException, UndefinedAccountException;
+	void unlock_account(String name) throws SQLException, UndefinedAccountException, EmptyFieldException;
 
-	void add_friend(String username, String friendName, int status) throws SQLException;
+	boolean isFriend(String username, String friendName) throws SQLException;
 
-	void remove_friend(String username, String friendName) throws SQLException;
+	void add_friend(String username, String friendName, int status) throws SQLException, UndefinedAccountException,
+			SelfFriendRequestException, EmptyFieldException;
+
+	void remove_friend(String username, String friendName) throws SQLException, UndefinedFriendException,
+			UndefinedAccountException, SelfFriendRequestException, EmptyFieldException;
 
 	List<String> get_friends(String name) throws SQLException;
 
