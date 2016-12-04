@@ -11,7 +11,7 @@ public interface Authenticator {
 	boolean isSetupDone() throws SQLException;
 
 	void create_account(String name, String pwd1, String pwd2, String email, String phone, String role)
-			throws SQLException, PasswordMismatchException, EmptyFieldException, ExistingAccountException;
+			throws SQLException, PasswordMismatchException, EmptyFieldException;
 
 	void delete_account(String name)
 			throws SQLException, UndefinedAccountException, LockedAccountException, AccountConnectionException;
@@ -25,19 +25,19 @@ public interface Authenticator {
 
 	void unlock_account(String name) throws SQLException, UndefinedAccountException, EmptyFieldException;
 
+	void add_friend(String username, String friendName, int status)
+			throws SQLException, UndefinedAccountException, SelfFriendException, EmptyFieldException;
+
+	void remove_friend(String username, String friendName) throws SQLException,
+			UndefinedFriendException, UndefinedAccountException, SelfFriendException, EmptyFieldException;
+
 	boolean isFriend(String username, String friendName) throws SQLException;
-
-	void add_friend(String username, String friendName, int status) throws SQLException, UndefinedAccountException,
-			SelfFriendRequestException, EmptyFieldException;
-
-	void remove_friend(String username, String friendName) throws SQLException, UndefinedFriendException,
-			UndefinedAccountException, SelfFriendRequestException, EmptyFieldException;
 
 	List<String> get_friends(String name) throws SQLException;
 
-	List<String> get_pending_friends(String name) throws SQLException;
+	void accept_friend_request(String username, String friendName) throws SQLException;
 
-	void accept_friend_request(String name, String friendName) throws SQLException;
+	List<String> get_pending_friends(String name) throws SQLException;
 
 	void change_email(String username, String email) throws SQLException, EmptyFieldException;
 
@@ -59,8 +59,8 @@ public interface Authenticator {
 
 	void change_secretInfo_privacy_level(String username, String lvl) throws SQLException, EmptyFieldException;
 
-	Account login(String name, String pwd) throws SQLException, UndefinedAccountException, LockedAccountException,
-			EmptyFieldException, AuthenticationErrorException;
+	Account login(String name, String pwd) throws SQLException,
+			UndefinedAccountException, LockedAccountException, EmptyFieldException, AuthenticationErrorException;
 
 	void logout(Account acc) throws SQLException;
 }

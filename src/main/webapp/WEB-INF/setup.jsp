@@ -11,8 +11,8 @@
 <h2>Please enter a root password to setup the web application:</h2>
 <form name="SetupForm" method="post" action="/Setup">
     <div style="color: #FF0000;">${errorMessage}</div>
-    Password: <input type="password" name="password"/> <br/> <input
-        type="submit" value="Submit"/>
+    Password: <input type="password" name="password"/> <br/>
+    <input type="submit" value="Submit"/>
 </form>
 </body>
 </html>

@@ -14,6 +14,7 @@
 <a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
+<a href="/Admin">admin</a>
 <h1>Create a new Account</h1>
 <form name="createAccountForm" method="post" action="CreateAccount">
     <div style="color: #FF0000;">${errorMessage}</div>

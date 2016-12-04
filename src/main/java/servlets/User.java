@@ -13,10 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Logger;
 
-@WebServlet(name = "User", urlPatterns = { "/User/*" })
+@WebServlet(name = "User", urlPatterns = {"/User/*"})
 public class User extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(User.class.getName());

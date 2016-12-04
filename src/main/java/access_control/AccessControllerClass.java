@@ -34,13 +34,12 @@ public class AccessControllerClass implements AccessController {
     }
 
     public boolean checkPermission(Capability capability) throws SQLException {
-        //TODO: Timeouts
         Capability cap = getCapability(capability.getOwner(), capability.getGrantee(), capability.getResource(),
                 capability.getOperation());
         return cap != null;
     }
 
-    public List<CapabilityClass> getCapabilities(String user) throws SQLException {
-        return qr.query(GETCAPSSQL, new BeanListHandler<>(CapabilityClass.class), user);
+    public List<CapabilityClass> getCapabilities(String username) throws SQLException {
+        return qr.query(GETCAPSSQL, new BeanListHandler<>(CapabilityClass.class), username);
     }
 }

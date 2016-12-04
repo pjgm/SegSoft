@@ -17,7 +17,6 @@ public class ContainerListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
         DataSourceManager cm = new DataSourceManager();
 
         ServletContext sc = servletContextEvent.getServletContext();

@@ -3,7 +3,6 @@ package main.java.servlets;
 import main.java.access_control.AccessController;
 import main.java.app.Authenticator;
 import main.java.exceptions.EmptyFieldException;
-import main.java.exceptions.ExistingAccountException;
 import main.java.exceptions.PasswordMismatchException;
 import main.java.model.Roles;
 import main.java.validation.Validator;
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "CreateAccount", urlPatterns = { "/CreateAccount" })
+@WebServlet(name = "CreateAccount", urlPatterns = {"/CreateAccount"})
 public class CreateAccount extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(CreateAccount.class.getName());
@@ -79,10 +78,10 @@ public class CreateAccount extends HttpServlet {
             ac.createCapability("root", username, "Logout", "RWX");
             ac.createCapability("root", username, "MyProfile", "RWX");
             LOGGER.log(Level.FINE, "CREATED ACCOUNT " + username);
-            request.setAttribute("errorMessage", "User created successfully");
+            request.setAttribute("errorMessage", "Account created successfully");
         } catch (SQLException e) {
             request.setAttribute("errorMessage", "User already exists");
-        } catch (PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
+        } catch (PasswordMismatchException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());
         } finally {
             request.getRequestDispatcher("/WEB-INF/createaccount.jsp").forward(request, response);

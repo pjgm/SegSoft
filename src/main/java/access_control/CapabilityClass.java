@@ -2,17 +2,9 @@ package main.java.access_control;
 
 public class CapabilityClass implements Capability {
 
-    private String owner, grantee, resource, operation, creationTime;
+    private String grantee, owner, resource, operation, creationTime;
 
     public CapabilityClass() {}
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
 
     public String getGrantee() {
         return grantee;
@@ -20,6 +12,14 @@ public class CapabilityClass implements Capability {
 
     public void setGrantee(String grantee) {
         this.grantee = grantee;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getResource() {

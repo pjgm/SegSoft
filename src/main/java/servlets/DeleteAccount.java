@@ -4,7 +4,6 @@ import main.java.app.Authenticator;
 import main.java.exceptions.AccountConnectionException;
 import main.java.exceptions.LockedAccountException;
 import main.java.exceptions.UndefinedAccountException;
-import main.java.model.Account;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -16,9 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "DeleteAccount", urlPatterns = { "/DeleteAccount" })
+@WebServlet(name = "DeleteAccount", urlPatterns = {"/DeleteAccount"})
 public class DeleteAccount extends HttpServlet {
 
 	private static final Logger LOGGER = Logger.getLogger(DeleteAccount.class.getName());
@@ -40,7 +38,7 @@ public class DeleteAccount extends HttpServlet {
 		try {
 			auth.delete_account(username);
 			LOGGER.log(Level.FINE, "DELETED ACCOUNT " + username);
-			request.setAttribute("errorMessage", "User deleted successfully");
+			request.setAttribute("errorMessage", "Account deleted successfully");
 		} catch (SQLException | UndefinedAccountException | LockedAccountException | AccountConnectionException e) {
 			request.setAttribute("errorMessage", e.getMessage());
 		} finally {

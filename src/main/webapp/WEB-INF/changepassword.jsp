@@ -14,14 +14,13 @@
 <a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
+<a href="/Admin">admin</a>
 <h1>Change the Password</h1>
 <form name="ChangePasswordForm" method="post" action="ChangePassword">
     <div style="color: RED;">${errorMessage}</div>
     New password:
-    <input type="password" name="password"/> <br/> Confirm New
-    Password:
-    <input type="password" name="password2"/> <br/> <input
-        type="submit" value="Submit"/>
+    <input type="password" name="password"/> <br/>
+    Confirm New Password: <input type="password" name="password2"/> <br/> <input type="submit" value="Submit"/>
 </form>
 </body>
 </html>

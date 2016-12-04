@@ -14,11 +14,11 @@
 <a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
+<a href="/Admin">admin</a>
 <h1>Delete an Account</h1>
 <form name="deleteAccountForm" method="post" action="DeleteAccount">
     <div style="color: #FF0000;">${errorMessage}</div>
-    Username: <input type="text" name="username"/> <br/> <input
-        type="submit" value="Submit"/>
+    Username: <input type="text" name="username"/> <br/> <input type="submit" value="Submit"/>
 </form>
 </body>
 </html>

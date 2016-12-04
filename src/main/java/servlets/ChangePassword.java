@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "ChangePassword", urlPatterns = { "/ChangePassword" })
+@WebServlet(name = "ChangePassword", urlPatterns = {"/ChangePassword"})
 public class ChangePassword extends HttpServlet {
 
 	private static final Logger LOGGER = Logger.getLogger(ChangePassword.class.getName());
@@ -53,7 +53,7 @@ public class ChangePassword extends HttpServlet {
 			Account acc = (AccountClass) session.getAttribute("USER");
 			String username = acc.getUsername();
 			auth.change_pwd(username, password, password2);
-			LOGGER.log(Level.FINE, "PASSWORD CHANGE FOR USER " + username);
+			LOGGER.log(Level.FINE, "PASSWORD CHANGED FOR USER " + username);
 			auth.logout(acc);
 			session.invalidate();
 			request.setAttribute("errorMessage", "Password changed successfully");

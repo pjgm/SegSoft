@@ -2,13 +2,13 @@ package main.java.access_control;
 
 public interface Capability {
 
-    String getOwner();
-
-    void setOwner(String owner);
-
     String getGrantee();
 
     void setGrantee(String grantee);
+
+    String getOwner();
+
+    void setOwner(String owner);
 
     String getResource();
 

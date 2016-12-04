@@ -26,6 +26,7 @@
 <a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
+<a href="/Admin">admin</a>
 ${info}
 <div style="color: #FF0000;">${errorMessage}</div>
 <form name="MyProfileForm" method="post" action="/MyProfile">

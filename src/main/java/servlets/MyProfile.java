@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
-@WebServlet(name = "MyProfile", urlPatterns = { "/MyProfile" })
+@WebServlet(name = "MyProfile", urlPatterns = {"/MyProfile"})
 public class MyProfile extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(MyProfile.class.getName());
@@ -43,7 +43,7 @@ public class MyProfile extends HttpServlet {
         request.setAttribute("username", username);
 
         String info = "<table><tr><th>Name</th><th>Email</th><th>Phone</th><th>Public Info</th>" +
-                "<th>Bio</th><th>Private Info</th></tr>";
+                "<th>Internal Info</th><th>Private Info</th></tr>";
         info += "<tr>";
         info += "<td>" + "<a href=\"/User/" + username + "\">" + username + "</a>" + "</td>";
         info += "<td>" + acc.getEmail() + "</td>";
@@ -101,88 +101,103 @@ public class MyProfile extends HttpServlet {
             }
             if (submitButton.equals("emailpl")) {
                 String newEmailPL = request.getParameter("emailPL");
-                if(newEmailPL.equals("public")) {
-                    auth.change_email_privacy_level(username, "public");
-                    request.setAttribute("errorMessage", "Email is now public");
+                switch (newEmailPL) {
+                    case "public":
+                        auth.change_email_privacy_level(username, "public");
+                        request.setAttribute("errorMessage", "Email is now public");
+                        break;
+                    case "internal":
+                        auth.change_email_privacy_level(username, "internal");
+                        request.setAttribute("errorMessage", "Email is now internal");
+                        break;
+                    case "private":
+                        auth.change_email_privacy_level(username, "private");
+                        request.setAttribute("errorMessage", "Email is now private");
+                        break;
+                    default:
+                        request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
+                        break;
                 }
-                else if(newEmailPL.equals("internal")) {
-                    auth.change_email_privacy_level(username, "internal");
-                    request.setAttribute("errorMessage", "Email is now internal");
-                }
-                else if(newEmailPL.equals("private")) {
-                    auth.change_email_privacy_level(username, "private");
-                    request.setAttribute("errorMessage", "Email is now private");
-                }
-                else
-                    request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
             }
             if (submitButton.equals("phonepl")) {
                 String newPhonePL = request.getParameter("phonePL");
-                if(newPhonePL.equals("public")) {
-                    auth.change_phone_privacy_level(username, "public");
-                    request.setAttribute("errorMessage", "Phone is now public");
+                switch (newPhonePL) {
+                    case "public":
+                        auth.change_phone_privacy_level(username, "public");
+                        request.setAttribute("errorMessage", "Phone is now public");
+                        break;
+                    case "internal":
+                        auth.change_phone_privacy_level(username, "internal");
+                        request.setAttribute("errorMessage", "Phone is now internal");
+                        break;
+                    case "private":
+                        auth.change_phone_privacy_level(username, "private");
+                        request.setAttribute("errorMessage", "Phone is now private");
+                        break;
+                    default:
+                        request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
+                        break;
                 }
-                else if(newPhonePL.equals("internal")) {
-                    auth.change_phone_privacy_level(username, "internal");
-                    request.setAttribute("errorMessage", "Phone is now internal");
-                }
-                else if(newPhonePL.equals("private")) {
-                    auth.change_phone_privacy_level(username, "private");
-                    request.setAttribute("errorMessage", "Phone is now private");
-                }
-                else
-                    request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
             }
             if (submitButton.equals("pipl")) {
                 String newPublicInfoPL = request.getParameter("publicInfoPL");
-                if(newPublicInfoPL.equals("public")) {
-                    auth.change_publicInfo_privacy_level(username, "public");
-                    request.setAttribute("errorMessage", "Public info is now public");
+                switch (newPublicInfoPL) {
+                    case "public":
+                        auth.change_publicInfo_privacy_level(username, "public");
+                        request.setAttribute("errorMessage", "Public info is now public");
+                        break;
+                    case "internal":
+                        auth.change_publicInfo_privacy_level(username, "internal");
+                        request.setAttribute("errorMessage", "Public info is now internal");
+                        break;
+                    case "private":
+                        auth.change_publicInfo_privacy_level(username, "private");
+                        request.setAttribute("errorMessage", "Public info is now private");
+                        break;
+                    default:
+                        request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
+                        break;
                 }
-                else if(newPublicInfoPL.equals("internal")) {
-                    auth.change_publicInfo_privacy_level(username, "internal");
-                    request.setAttribute("errorMessage", "Public info is now internal");
-                }
-                else if(newPublicInfoPL.equals("private")) {
-                    auth.change_publicInfo_privacy_level(username, "private");
-                    request.setAttribute("errorMessage", "Public info is now private");
-                }
-                else
-                    request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
             }
             if (submitButton.equals("iipl")) {
                 String newInternalInfoPL = request.getParameter("internalInfoPL");
-                if(newInternalInfoPL.equals("public")) {
-                    auth.change_internalInfo_privacy_level(username, "public");
-                    request.setAttribute("errorMessage", "Internal info is now public");
+                switch (newInternalInfoPL) {
+                    case "public":
+                        auth.change_internalInfo_privacy_level(username, "public");
+                        request.setAttribute("errorMessage", "Internal info is now public");
+                        break;
+                    case "internal":
+                        auth.change_internalInfo_privacy_level(username, "internal");
+                        request.setAttribute("errorMessage", "Internal info is now internal");
+                        break;
+                    case "private":
+                        auth.change_internalInfo_privacy_level(username, "private");
+                        request.setAttribute("errorMessage", "Internal info is now private");
+                        break;
+                    default:
+                        request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
+                        break;
                 }
-                else if(newInternalInfoPL.equals("internal")) {
-                    auth.change_internalInfo_privacy_level(username, "internal");
-                    request.setAttribute("errorMessage", "Internal info is now internal");
-                }
-                else if(newInternalInfoPL.equals("private")) {
-                    auth.change_internalInfo_privacy_level(username, "private");
-                    request.setAttribute("errorMessage", "Internal info is now private");
-                }
-                else
-                    request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
             }
             if (submitButton.equals("sipl")) {
                 String newSecretInfoPL = request.getParameter("secretInfoPL");
-                if(newSecretInfoPL.equals("public")) {
-                    auth.change_secretInfo_privacy_level(username, "public");
-                    request.setAttribute("errorMessage", "Secret info is now public");
+                switch (newSecretInfoPL) {
+                    case "public":
+                        auth.change_secretInfo_privacy_level(username, "public");
+                        request.setAttribute("errorMessage", "Secret info is now public");
+                        break;
+                    case "internal":
+                        auth.change_secretInfo_privacy_level(username, "internal");
+                        request.setAttribute("errorMessage", "Secret info is now internal");
+                        break;
+                    case "private":
+                        auth.change_secretInfo_privacy_level(username, "private");
+                        request.setAttribute("errorMessage", "Secret info is now private");
+                        break;
+                    default:
+                        request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
+                        break;
                 }
-                else if(newSecretInfoPL.equals("internal")) {
-                    auth.change_secretInfo_privacy_level(username, "internal");
-                    request.setAttribute("errorMessage", "Secret info is now internal");
-                }
-                else if(newSecretInfoPL.equals("private")) {
-                    auth.change_secretInfo_privacy_level(username, "private");
-                    request.setAttribute("errorMessage", "Secret info is now private");
-                }
-                else
-                    request.setAttribute("errorMessage", "Invalid input: please insert either public, internal or private");
             }
         } catch (EmptyFieldException | SQLException e) {
             request.setAttribute("errorMessage", e.getMessage());

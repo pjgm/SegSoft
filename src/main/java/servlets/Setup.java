@@ -3,8 +3,8 @@ package main.java.servlets;
 import main.java.access_control.AccessController;
 import main.java.app.Authenticator;
 import main.java.exceptions.EmptyFieldException;
-import main.java.exceptions.ExistingAccountException;
 import main.java.exceptions.PasswordMismatchException;
+import main.java.exceptions.UndefinedAccountException;
 import main.java.model.Roles;
 import main.java.validation.Validator;
 
@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@WebServlet(name = "Setup", urlPatterns = { "/Setup" })
+@WebServlet(name = "Setup", urlPatterns = {"/Setup"})
 public class Setup extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(Setup.class.getName());
@@ -42,7 +42,7 @@ public class Setup extends HttpServlet {
         String password = request.getParameter("password");
 
         if (!val.validatePassword(password)) {
-            request.setAttribute("errorMessage", "Password has invalid format. Check if it has at least 8 characters.");
+            request.setAttribute("errorMessage", "Password has invalid format. Check if it has at least 8 characters");
             request.getRequestDispatcher("/WEB-INF/setup.jsp").forward(request, response);
             return;
         }
@@ -50,7 +50,7 @@ public class Setup extends HttpServlet {
         ServletContext sc = getServletContext();
 
         try {
-            auth.create_account("system", password, password, "system@system.com" , "000000", "SYSTEM");
+            auth.create_account("system", password, password, "system@system.com" , "0000000", "SYSTEM");
             auth.create_account("root", password, password, "admin@admin.com", "910000000", Roles.ADMIN.name());
             ac.createCapability("system", "root", "Admin", "RWX");
             ac.createCapability("system", "root", "Home", "RWX");
@@ -61,11 +61,12 @@ public class Setup extends HttpServlet {
             ac.createCapability("system", "root", "Friends", "RWX");
             ac.createCapability("system", "root", "Logout", "RWX");
             ac.createCapability("system", "root", "MyProfile", "RWX");
+            auth.lock_account("system");
             sc.setAttribute("isSetupDone", auth.isSetupDone());
             LOGGER.log(Level.FINE, "ROOT SETUP SUCCESSFUL");
             request.setAttribute("errorMessage", "Admin created successfully");
             request.getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
-        } catch (SQLException | PasswordMismatchException | ExistingAccountException | EmptyFieldException e) {
+        } catch (SQLException | UndefinedAccountException | PasswordMismatchException | EmptyFieldException e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/setup.jsp").forward(request, response);
         }

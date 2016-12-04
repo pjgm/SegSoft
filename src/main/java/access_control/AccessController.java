@@ -11,5 +11,5 @@ public interface AccessController {
 
     boolean checkPermission(Capability capability) throws SQLException;
 
-    List<CapabilityClass> getCapabilities(String user) throws SQLException;
+    List<CapabilityClass> getCapabilities(String username) throws SQLException;
 }

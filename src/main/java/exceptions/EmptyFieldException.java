@@ -4,6 +4,6 @@ public class EmptyFieldException extends Exception {
 
 	@Override
 	public String getMessage() {
-		return "A required field is empty";
+		return "A required field was left empty";
 	}
 }

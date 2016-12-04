@@ -14,6 +14,7 @@
 <a href="/DeleteAccount">delete_account</a>
 <a href="/ChangePassword">change_pwd</a>
 <a href="/Logout">logout</a>
+<a href="/Admin">admin</a>
 <form name="LogoutForm" method="post" action="Logout">
     <div style="color: #FF0000;">${errorMessage}</div>
     <input type="submit" value="Click here to logout"/>

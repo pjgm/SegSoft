@@ -88,7 +88,7 @@ public class AuthFilter implements Filter {
             e.printStackTrace();
         }
 
-        boolean isLocked = loggedIn && ((Account) session.getAttribute("USER")).getLocked() == 1;
+        boolean isLocked = ((Account) session.getAttribute("USER")).getLocked() == 1;
 
         if (isLocked) {
             session.invalidate();
